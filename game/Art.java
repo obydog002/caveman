@@ -26,7 +26,6 @@ public class Art
 	public static Bitmap boulderud = loadBitmap("res/entities/boulderud.png");
 	public static Bitmap boulderlurd = loadBitmap("res/entities/boulderlurd.png");
 	
-	
 	public static Bitmap rockBackground = loadBitmap("res/backgrounds/rockBackground.png");
 	public static Bitmap toolBar = loadBitmap("res/backgrounds/toolBar.png");
 	public static Bitmap club = loadBitmap("res/entities/club.png");
