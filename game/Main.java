@@ -33,8 +33,6 @@ public class Main extends Canvas implements Runnable
 		Dimension size = new Dimension(SCALE*WIDTH, SCALE*HEIGHT);
 		setSize(size);
 		setPreferredSize(size);
-		setMinimumSize(size);
-		setMaximumSize(size);
 			
 		input = new Input();
 		
@@ -137,19 +135,22 @@ public class Main extends Canvas implements Runnable
 		
 		screen.render(game);
 		
-		for (int i=0; i< SCALE*SCALE*WIDTH*HEIGHT; i++)
+		for (int i = 0; i < SCALE*SCALE*WIDTH*HEIGHT; i++)
 		{
 			pixels[i] = screen.pixels[i];
 		}
+		
 		Graphics g = bs.getDrawGraphics();
 		g.fillRect(0, 0, getWidth(), getHeight());
-		g.drawImage(img,0,0,SCALE*WIDTH, SCALE*HEIGHT, null);
+		g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
+		
 		g.dispose();
 		bs.show();
 	}
+	
 	public static void main(String[] arg)
 	{
-		int level = 4;
+		int level = 1;
 		rng = new Random();
 		if (arg.length > 0)
 		{
@@ -160,7 +161,7 @@ public class Main extends Canvas implements Runnable
 		
 		frame.add(game);
 		frame.pack();
-		frame.setResizable(false);
+		frame.setResizable(true);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
