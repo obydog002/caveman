@@ -9,6 +9,3 @@ Play as a caveman and get to the end of the level. Push blocks to create paths, 
 clone this repository, then compile from inside the caveman folder with
 javac game/&#x2217;.java
 Then run with java game.Main
-
-## License
-Do what you want with the code, including contribution or commercial stuff.
