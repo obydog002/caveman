@@ -2,10 +2,11 @@ package game;
 
 public class Entity
 {
-	// each entity holds a position in the 21*13 grid.
+	// entity position
 	private int x;
 	private int y;
 	int id = 0;
+	
 	private Bitmap image;
 	private boolean passable; //dictates whether it can be passed
 	private boolean hostile; // whether it can kill the player
