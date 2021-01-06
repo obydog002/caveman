@@ -12,7 +12,8 @@ public class Bitmap
 		this.height = height;
 		pixels = new int[width*height];
 	}
-	public void darken(double scale) //darken all pixels by a fraction eg 1 wont darken, 0 completely black
+	
+	public void darken(double scale) // darken all pixels by a fraction eg 1 wont darken, 0 completely black
 	{
 		for (int i = 0; i < pixels.length; i++)
 		{
@@ -26,6 +27,7 @@ public class Bitmap
 			pixels[i] = 0xff000000 + (r << 16) + (g << 8) + b;
 		}
 	}
+	
 	public void draw(String word, int xOffs, int yOffs, int col)
 	{
 		for (int i = 0; i < word.length(); i++)
@@ -33,6 +35,7 @@ public class Bitmap
 			drawChar((int)word.charAt(i),xOffs + Main.SCALE*i,yOffs,col);
 		}
 	}
+	
 	public void drawChar(int c, int xOffs, int yOffs, int col)
 	{
 		int bitx = 256;
@@ -85,6 +88,7 @@ public class Bitmap
 			}
 		}
 	}
+	
 	public void draw(Bitmap bitmap, int xOffs, int yOffs)
 	{
 		for (int y = 0; y < bitmap.height; y++)
