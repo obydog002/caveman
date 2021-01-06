@@ -10,6 +10,7 @@ public class MovableWall extends Entity
 		setPush();
 		setBreakable();
 	}
+	
 	public boolean tryPush(Game game, int direction)
 	{
 		if (!dir[direction]) return false;
