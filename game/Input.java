@@ -4,13 +4,18 @@ import java.awt.event.*;
 
 import java.util.ArrayList;
 
-public class Input implements KeyListener, MouseMotionListener
+public class Input implements KeyListener
 {
 	public class Key 
 	{
 		public int presses, absorbs;
 		public boolean down, clicked;
 
+		public boolean press_initial = false;
+		public boolean p2 = true;
+		
+		public int press_inital_count = -1;
+		
 		public Key() 
 		{
 			keys.add(this);
@@ -18,15 +23,52 @@ public class Input implements KeyListener, MouseMotionListener
 
 		public void toggle(boolean pressed) 
 		{
-			if (pressed != down) 
-				down = pressed;
+			if (press_initial)
+			{
+				press_initial = false;
+			}
 			
-			if (pressed) 
-				presses++;
-		}
+			if (pressed != down) 
+			{
+				down = pressed;
+			}
 
+			if (pressed) 
+			{
+				presses++;
+				
+				if (p2 && !press_initial)
+				{
+					p2 = false;
+					press_initial = true;
+					press_inital_count = -1;
+				}
+				else
+					press_initial = false;
+			}
+			else
+			{
+				p2 = true;
+			}
+			
+			/*if (press_initial)
+			{
+				System.out.println("\n\ndebug----------D3 B U GG");
+				System.out.println("first press");
+				System.out.println("debug----------o0 x d zz\n\n");
+			}*/
+		}
+		
 		public void tick() 
 		{
+			if (press_inital_count > 0)
+				press_inital_count--;
+			
+			if (press_initial && press_inital_count == -1)
+			{
+				press_inital_count = 1;
+			}
+			
 			if (absorbs < presses) 
 			{
 				absorbs++;
@@ -34,6 +76,12 @@ public class Input implements KeyListener, MouseMotionListener
 			} 
 			else 
 				clicked = false;
+		}
+		
+		// if this is the first 'press'
+		public boolean press_initial()
+		{
+			return press_inital_count > 0;
 		}
 	}
 	
@@ -46,9 +94,6 @@ public class Input implements KeyListener, MouseMotionListener
 	public Key use = new Key();
 	public Key pause = new Key();
 	public Key die = new Key();
-	
-	public int x = 0;
-	public int y = 0;
 	
 	public void releaseAll() 
 	{
@@ -76,6 +121,11 @@ public class Input implements KeyListener, MouseMotionListener
 		toggle(ke, false);
 	}
 	
+	public void keyTyped(KeyEvent ke)
+	{
+		// empty
+	}
+	
 	private void toggle(KeyEvent ke, boolean pressed)
 	{
 		if (ke.getKeyCode() == KeyEvent.VK_W) up.toggle(pressed);
@@ -90,24 +140,8 @@ public class Input implements KeyListener, MouseMotionListener
 		
 		if (ke.getKeyCode() == KeyEvent.VK_SPACE) use.toggle(pressed);
 		
-		if (ke.getKeyCode() == KeyEvent.VK_P) pause.toggle(pressed);
+		if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) pause.toggle(pressed);
 		
-		if (ke.getKeyCode() == KeyEvent.VK_B) die.toggle(pressed);
-	}
-	
-	public void mouseDragged(MouseEvent e)
-	{
-		x = e.getX();
-		y = e.getY();
-	}
-	public void mouseMoved(MouseEvent e)
-	{
-		x = e.getX();
-		y = e.getY();
-	}
-	
-	public void keyTyped(KeyEvent e)
-	{
-		// nothing
+		if (ke.getKeyCode() == KeyEvent.VK_R) die.toggle(pressed);
 	}
 }
