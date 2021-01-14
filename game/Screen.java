@@ -34,7 +34,7 @@ public class Screen extends Bitmap
 		draw(clubs,32,inv_height,0xff444444);
 		draw(game.levelName,(int)(Main.SCALE *(Main.WIDTH / 2.0 - 0.5*(game.levelName.length() - 1))),inv_height,0xff444444);
 		
-		if (game.state != Game.State.READY)
+		if (game.state != Game.State.GAMEPLAY)
 		{
 			darken(.2);
 			draw(game.word,(int)(Main.SCALE *(Main.WIDTH / 2.0 - 0.5*(game.word.length() - 1))),Main.SCALE * (Main.HEIGHT/2 - 1),game.wordCol);

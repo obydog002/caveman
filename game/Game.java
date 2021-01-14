@@ -5,12 +5,19 @@ import java.awt.event.*;
 
 public class Game
 {
-	static int time2sec = 240;
+	// game states
+	enum State
+	{
+		LOADING_MAP, READY, GAMEPLAY, PAUSE, WIN, DIE
+	}
+	State state;
+	
 	static int normCol = 0xffff921e;
 	static int passCol = 0xff4cff67;
 	static int deadCol = 0xffff0f33;
 	
-	int time = 240;
+	int time = 2*Constants.SECOND;
+	
 	ArrayList<Entity> entities;
 	ArrayList<Entity> garbage;
 	Entity exit;
@@ -23,7 +30,6 @@ public class Game
 	
 	boolean win = false;
 	
-	int state = 0;
 	int level;
 	String levelName = "";
 	String word = "";
@@ -36,13 +42,16 @@ public class Game
 	{
 		this.level = level;
 		this.input = input;
-		background = Art.rockBackground;
+		background = Art.horse_bg;
 		entities = new ArrayList();
 		garbage = new ArrayList();
-		player = new Player(-1,-1,12,Art.player);
+		player = new Player(-1,-1,10,Art.player);
 		exit = new Entity(-10,-10,false,Art.exit);
+		
+		state = State.LOADING_MAP;
 	}
 	
+	// change this and editor
 	public void loadMap()
 	{
 		clubs = 0;
@@ -109,14 +118,99 @@ public class Game
 	
 	public void tick()
 	{
+		switch (state)
+		{
+			case LOADING_MAP: 
+					word = "level: " + level + " go!";
+					loadMap();
+					state = State.READY;
+					time = 2*Constants.SECOND;
+					break;
+					
+			case READY: 
+					if (time > 0)
+						time--;
+					else
+					{
+						state = State.GAMEPLAY;
+						player.dead = false;
+						win = false;
+						time = Constants.SECOND;
+					}
+					break;
+
+			case GAMEPLAY: 
+					if (input.pause.press_initial())
+					{
+						state = State.PAUSE;
+						word = "paused! press p to unpause";
+						wordCol = normCol;
+						time = 2*Constants.SECOND;
+					}
+					else
+						word = "";
+					
+					gameTick();
+					
+					if (time > 0)
+						time--;
+					
+					if (win)
+					{
+						time = 2*Constants.SECOND;
+						
+						wordCol = passCol;
+						word = "passed!";
+						
+						if (level < LEVELIMIT)
+							level++;
+						
+						state = State.WIN;
+					}
+					else if (player.dead)
+					{
+						player.move(-1,-1);
+						
+						wordCol = deadCol;
+						word = "dead!";
+						
+						state = State.DIE;
+						time = 2*Constants.SECOND;
+					}
+					break;
+			case WIN:
+			case DIE:
+					if (time > 0)
+						time--;
+					else
+					{
+						time = 2*Constants.SECOND;
+						state = State.LOADING_MAP;
+					}
+					break;
+			case PAUSE: 
+					if (input.pause.press_initial())
+					{
+						state = State.GAMEPLAY;
+						time = Constants.SECOND;
+					}
+					break;
+		}
+	}
+	
+	/*public void tick()
+	{
+		// start state
 		if (state == 0)
 		{
 			state = 1;
-			time = time2sec;
+			time = 2*Constants.SECOND;
 			wordCol = normCol;
 			word = "level: " + level + " go!";
 			loadMap();
-		}
+		} 
+		
+		// dead and ready
 		if (state == 1)
 		{
 			if (time > 0)
@@ -126,16 +220,17 @@ public class Game
 				state = 2;
 				player.dead = false;
 				win = false;
+				time = Constants.SECOND;
 			}
-		}
+		} // game play state
 		else if (state == 2)
 		{
-			if (input.pause.clicked && time == 0)
+			if (input.pause.press_initial())
 			{
 				state = 5;
 				word = "paused! press p to unpause";
 				wordCol = normCol;
-				time = time2sec/2;
+				time = 2*Constants.SECOND;
 			}
 			else
 				word = "";
@@ -144,9 +239,10 @@ public class Game
 			
 			if (time > 0)
 				time--;
+			
 			if (win)
 			{
-				time = time2sec;
+				time = 2*Constants.SECOND;
 				state = 4;
 				wordCol = passCol;
 				word = "passed!";
@@ -157,7 +253,7 @@ public class Game
 			{
 				player.move(-1,-1);
 				state = 3;
-				time = time2sec;
+				time = 2*Constants.SECOND;
 				wordCol = deadCol;
 				word = "dead!";
 			}
@@ -169,7 +265,7 @@ public class Game
 			else
 			{
 				state = 1;
-				time = time2sec;
+				time = 2*Constants.SECOND;
 				wordCol = normCol;
 				word = "level: " + level + " go!";
 				loadMap();
@@ -182,23 +278,23 @@ public class Game
 			else
 			{
 				state = 1;
-				time = time2sec;
+				time = 2*Constants.SECOND;
 				wordCol = normCol;
 				word = "level: " + level + " go!";
 				loadMap();
 			}
-		}
+		} // pause state
 		else if (state == 5)
 		{
-			if (input.pause.clicked && time == 0)
+			if (input.pause.press_initial())
 			{
 				state = 2;
-				time = time2sec/2;
+				time = Constants.SECOND;
 			}
-			if (time > 0)
-				time--;
 		}
-	}
+		
+
+	}*/
 	
 	public void gameTick()
 	{

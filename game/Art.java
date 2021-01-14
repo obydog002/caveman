@@ -26,7 +26,10 @@ public class Art
 	public static Bitmap boulderud = loadBitmap("res/entities/boulderud.png");
 	public static Bitmap boulderlurd = loadBitmap("res/entities/boulderlurd.png");
 	
+	// backgrounds
 	public static Bitmap rockBackground = loadBitmap("res/backgrounds/rockBackground.png");
+	public static Bitmap horse_bg = loadBitmap("res/backgrounds/fire_horse.png");
+	
 	public static Bitmap toolBar = loadBitmap("res/backgrounds/toolBar.png");
 	public static Bitmap club = loadBitmap("res/entities/club.png");
 	
@@ -41,6 +44,7 @@ public class Art
 			int h = img.getHeight();
 			Bitmap b = new Bitmap(w,h);
 			img.getRGB(0,0,w,h,b.pixels,0,w);
+			
 			return b;
 		}
 		catch (Exception e)

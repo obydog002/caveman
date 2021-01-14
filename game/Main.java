@@ -16,6 +16,7 @@ public class Main extends Canvas implements Runnable
 
 	public static final int HEIGHT = 27 + 1; // 1 because item screen at the bottom
 
+	public static final int TICKS_PER_SECOND = 90;
 	
 	private boolean running;
 	private Thread thread;
@@ -38,13 +39,12 @@ public class Main extends Canvas implements Runnable
 		
 		game = new Game(level, input);
 		
-		screen = new Screen(SCALE*WIDTH, SCALE*HEIGHT);
+		screen = new Screen(WIDTH, HEIGHT, SCALE);
 			
 		img = new BufferedImage(SCALE*WIDTH, SCALE*HEIGHT, BufferedImage.TYPE_INT_RGB);
 		pixels = ((DataBufferInt)img.getRaster().getDataBuffer()).getData();
 		
 		addKeyListener(input);
-		addMouseMotionListener(input);
 	}
 	
 	public synchronized void start()
@@ -74,7 +74,7 @@ public class Main extends Canvas implements Runnable
 		int frames = 0;
 		double unprocessedSeconds = 0;
 		long lastTime = System.nanoTime();
-		double secondsPerTick = 1 / 90.0;
+		double secondsPerTick = 1.0 / (double)Constants.TICKS_PER_SECOND;
 		int tickCount = 0;
 
 		while (running) 
@@ -92,7 +92,7 @@ public class Main extends Canvas implements Runnable
 				unprocessedSeconds -= secondsPerTick;
 				ticked = true;
 				tickCount++;
-				if (tickCount % 90 == 0) 
+				if (tickCount % Constants.TICKS_PER_SECOND == 0) 
 				{
 					//System.out.println(frames + " fps");
 					lastTime += 1000;
@@ -109,6 +109,7 @@ public class Main extends Canvas implements Runnable
 				try 
 				{
 					Thread.sleep(1);
+					System.out.println("hmm?");
 				} 
 				catch (InterruptedException e) 
 				{
