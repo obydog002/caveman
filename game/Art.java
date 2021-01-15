@@ -28,7 +28,6 @@ public class Art
 	
 	// backgrounds
 	public static Bitmap rockBackground = loadBitmap("res/backgrounds/rockBackground.png");
-	public static Bitmap horse_bg = loadBitmap("res/backgrounds/fire_horse.png");
 	
 	public static Bitmap toolBar = loadBitmap("res/backgrounds/toolBar.png");
 	public static Bitmap club = loadBitmap("res/entities/club.png");

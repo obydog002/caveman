@@ -42,7 +42,7 @@ public class Game
 	{
 		this.level = level;
 		this.input = input;
-		background = Art.horse_bg;
+		background = Art.rockBackground;
 		entities = new ArrayList();
 		garbage = new ArrayList();
 		player = new Player(-1,-1,10,Art.player);
