@@ -15,8 +15,6 @@ public class Main extends Canvas implements Runnable
 	public static final int WIDTH = 51;
 
 	public static final int HEIGHT = 27 + 1; // 1 because item screen at the bottom
-
-	public static final int TICKS_PER_SECOND = 90;
 	
 	private boolean running;
 	private Thread thread;
@@ -109,7 +107,6 @@ public class Main extends Canvas implements Runnable
 				try 
 				{
 					Thread.sleep(1);
-					System.out.println("hmm?");
 				} 
 				catch (InterruptedException e) 
 				{
