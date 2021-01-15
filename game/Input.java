@@ -11,8 +11,7 @@ public class Input implements KeyListener
 		public int presses, absorbs;
 		public boolean down, clicked;
 
-		public boolean press_initial = false;
-		public boolean p2 = true;
+		public boolean press_initial = true;
 		
 		public int press_inital_count = -1;
 		
@@ -23,11 +22,6 @@ public class Input implements KeyListener
 
 		public void toggle(boolean pressed) 
 		{
-			if (press_initial)
-			{
-				press_initial = false;
-			}
-			
 			if (pressed != down) 
 			{
 				down = pressed;
@@ -37,18 +31,15 @@ public class Input implements KeyListener
 			{
 				presses++;
 				
-				if (p2 && !press_initial)
+				if (press_initial)
 				{
-					p2 = false;
-					press_initial = true;
-					press_inital_count = -1;
-				}
-				else
+					press_inital_count = 2;
 					press_initial = false;
+				}
 			}
 			else
 			{
-				p2 = true;
+				press_initial = true;
 			}
 			
 			/*if (press_initial)
@@ -63,11 +54,6 @@ public class Input implements KeyListener
 		{
 			if (press_inital_count > 0)
 				press_inital_count--;
-			
-			if (press_initial && press_inital_count == -1)
-			{
-				press_inital_count = 1;
-			}
 			
 			if (absorbs < presses) 
 			{
