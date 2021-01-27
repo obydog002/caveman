@@ -41,9 +41,6 @@ public class MainPanel extends JPanel
 	
 	// height of level
 	private int level_height = 27;
-
-	// ratio to determine how much to draw of the option panel
-	private double ratio = 0.2;
 	
 	// array for level entities and resources
 	// 0 - unbreakable wall1
@@ -89,12 +86,12 @@ public class MainPanel extends JPanel
 		Graphics2D g2D = (Graphics2D)g;
 		
 		
-		draw_options(g2D);
+		//draw_options(g2D);
 		draw_level(g2D);
 	}
 	
 	// draw the side left panel
-	public void draw_options(Graphics2D g)
+	/*public void draw_options(Graphics2D g)
 	{
 		double width = ratio*getWidth();
 		double height = getHeight();
@@ -124,15 +121,15 @@ public class MainPanel extends JPanel
 			x_i++;
 			index++;
 		}
-	}
+	}*/
 	
 	// draws the main level 
 	public void draw_level(Graphics2D g)
 	{
-		double width = (1 - ratio)*getWidth();
+		double width = getWidth();
 		double height = getHeight();
 		
-		int x = (int)(ratio*getWidth());
+		int x = 0;
 		
 		int x_line_gap = (int)(width/level_width);
 		int y_line_gap = (int)(height/level_height);
