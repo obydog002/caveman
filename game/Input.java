@@ -11,7 +11,7 @@ public class Input implements KeyListener
 		public int presses, absorbs;
 		public boolean down, clicked;
 
-		public boolean press_initial = true;
+		private boolean press_initial = true;
 		
 		public int press_inital_count = -1;
 		

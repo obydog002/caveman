@@ -45,7 +45,9 @@ public class Game
 		background = Art.rockBackground;
 		entities = new ArrayList();
 		garbage = new ArrayList();
-		player = new Player(-1,-1,10,Art.player);
+		
+		// 6 tick time for movement
+		player = new Player(-1,-1,8,Art.player);
 		exit = new Entity(-10,-10,false,Art.exit);
 		
 		state = State.LOADING_MAP;
@@ -143,9 +145,8 @@ public class Game
 					if (input.pause.press_initial())
 					{
 						state = State.PAUSE;
-						word = "paused! press p to unpause";
+						word = "paused! press esc to unpause";
 						wordCol = normCol;
-						time = 2*Constants.SECOND;
 					}
 					else
 						word = "";
@@ -192,7 +193,6 @@ public class Game
 					if (input.pause.press_initial())
 					{
 						state = State.GAMEPLAY;
-						time = Constants.SECOND;
 					}
 					break;
 		}

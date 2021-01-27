@@ -81,7 +81,7 @@ public class Main extends Canvas implements Runnable
 			long passedTime = now - lastTime;
 			lastTime = now;
 			if (passedTime < 0) passedTime = 0;
-			if (passedTime > 100000000) passedTime = 100000000;
+			if (passedTime > 1000000000) passedTime = 1000000000;
 			unprocessedSeconds += passedTime / 1000000000.0;
 			boolean ticked = false;
 			while (unprocessedSeconds > secondsPerTick) 
@@ -90,19 +90,19 @@ public class Main extends Canvas implements Runnable
 				unprocessedSeconds -= secondsPerTick;
 				ticked = true;
 				tickCount++;
-				if (tickCount % Constants.TICKS_PER_SECOND == 0) 
+				/*if (tickCount % Constants.TICKS_PER_SECOND == 0) 
 				{
-					//System.out.println(frames + " fps");
+					System.out.println(frames + " fps");
 					lastTime += 1000;
 					frames = 0;
-				}
+				}*/
 			}
 			if (ticked) 
 			{
 				render();
 				frames++;
 			} 
-			else 
+			/*else 
 			{
 				try 
 				{
@@ -112,7 +112,7 @@ public class Main extends Canvas implements Runnable
 				{
 					e.printStackTrace();
 				}
-			}
+			}*/
 		}
 	}
 	

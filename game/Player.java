@@ -17,14 +17,13 @@ public class Player extends Mob
 	
 	public void tick(Game game)
 	{	
-		if (game.input.use.down && game.clubs > 0)
+		if (game.input.use.press_initial() && game.clubs > 0)
 		{
 			Entity e[] = checkDirection(game);
-			if (lastdir != -1 && e[lastdir] != null && e[lastdir].breakable() && clubTimer == 0)
+			if (lastdir != -1 && e[lastdir] != null && e[lastdir].breakable())
 			{
 				game.clubs--;
 				e[lastdir].dead = true;
-				clubTimer = 45;
 			}
 		}
 		
@@ -57,9 +56,6 @@ public class Player extends Mob
 				direction = -1;
 			}
 		}
-		
-		if (clubTimer > 0)
-			clubTimer--;
 	}
 	
 	//overriden
