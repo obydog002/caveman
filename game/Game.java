@@ -46,8 +46,9 @@ public class Game
 		entities = new ArrayList();
 		garbage = new ArrayList();
 		
-		// 6 tick time for movement
-		player = new Player(-1,-1,8,Art.player);
+		// tick time for movement
+		// 80 tickzs
+		player = new Player(-1,-1,12,Art.player);
 		exit = new Entity(-10,-10,false,Art.exit);
 		
 		state = State.LOADING_MAP;
