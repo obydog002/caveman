@@ -9,12 +9,26 @@ public class ToolBar extends JToolBar
 	public ToolBar()
 	{
 		super("Editor Bar");
-		add_buttons();
+		
+		GridLayout layout = new GridLayout(0, 2);
+		
+		JPanel panel = new JPanel();
+		
+		//Dimension pref_size = new Dimension();
+		panel.setLayout(layout);
+		add_buttons(panel);
+		
+		panel.setVisible(true);
+		add(panel);
 	}
 	
-	private void add_buttons()
+	private void add_buttons(JPanel panel)
 	{
-		JButton test = new JButton("test");
-		this.add(test);
+		for (int i = 0; i < MainPanel.RES.length; i++)
+		{
+			ImageIcon icon = new ImageIcon(MainPanel.RES[i]);
+			JButton button = new JButton(icon);
+			panel.add(button);
+		}
 	}
 }

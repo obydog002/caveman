@@ -83,7 +83,7 @@ public class EditorMain extends JPanel implements ActionListener
 			System.out.println("save");
 		}
 	}
-	
+
 	public static void main(String[] args)
 	{
 		SwingUtilities.invokeLater(new Runnable()
