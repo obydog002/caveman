@@ -1,4 +1,4 @@
-package game;
+package src.game;
 
 public class Bitmap
 {
@@ -24,7 +24,18 @@ public class Bitmap
 		pixels = new int[width*height];
 	}
 	
+	// clear all pixels to a colour
+	public void clear(int col)
+	{
+		for (int i = 0; i < pixels.length; i++)
+		{
+			pixels[i] = col;
+		}
+	}
+	
 	// darken an individual pixel and return it
+	// 1 wont darken, 
+	// 0 completely black
 	public int darken(int col, double scale)
 	{
 		int r = (col >> 16) & 0x000000ff;
@@ -57,17 +68,17 @@ public class Bitmap
 	}
 	
 	// draw word
-	public void draw(String word, int xOffs, int yOffs, int col)
+	public void draw(String word, int xOffs, int yOffs, int col, int scale)
 	{
 		for (int i = 0; i < word.length(); i++)
 		{
-			drawChar((int)word.charAt(i),xOffs + Main.SCALE*i,yOffs,col);
+			drawChar((int)word.charAt(i),xOffs + scale*Constants.SCALE*i,yOffs,col, scale);
 		}
 	}
 	
 	// draw individual char
 	// TODO - GET RID OF ALL THESE MAGIC NUMBERS!!! USE ENUM OR SOMETHING IDIOT
-	public void drawChar(int c, int xOffs, int yOffs, int col)
+	public void drawChar(int c, int xOffs, int yOffs, int col, int scale)
 	{
 		int bitx = 288;
 		int bity = 96;
@@ -106,11 +117,11 @@ public class Bitmap
 		
 		for (int y = 0; y < 32; y++)
 		{
-			int yPix = y+yOffs;
+			int yPix = scale*y + yOffs;
 			if (yPix < 0 || yPix >= height) continue;
 			for (int x = 0; x < 32; x++)
 			{
-				int xPix = x+xOffs;
+				int xPix = scale*x + xOffs;
 				if (xPix < 0 || xPix >= width) continue;
 				
 				int src = Art.alphabet.pixels[(bitx + x) + (bity + y) * Art.alphabet.width];
@@ -120,27 +131,98 @@ public class Bitmap
 						src = col;
 					else if (src == CHAR_OUTSIDE_COL)
 						src = darken(col, 0.8);
-					pixels[xPix + yPix*width] = src;
+					
+					for (int i = 0; i < scale; i++)
+					{
+						for (int j = 0; j < scale; j++)
+						{
+							pixels[xPix + i + (yPix + j)*width] = src;
+						}
+					}
 				}
 			}
 		}
 	}
 	
+	// draw a box with a border colour, and inside colour, and scale for outside border
+	// from (x,y) to (x + width, y + width)
+	public void draw_box(int xOffs, int yOffs, int box_width, int box_height, int col, int border_col, int border_scale)
+	{
+		// draw inside
+		for (int y = border_scale; y < box_height - border_scale; y++)
+		{
+			int y_pix = yOffs + y;
+			if (y_pix < 0 || y_pix >= height) continue;
+			for (int x = border_scale; x < box_width - border_scale; x++)
+			{
+				int x_pix = xOffs + x;
+				if (x_pix < 0 || x_pix >= width) continue;
+				pixels[x_pix + y_pix*width] = col;
+			}
+		}
+		
+		// draw outside
+		int sign = 1;
+		for (int i = 0; i < 2; i++)
+		{
+			for (int y = 0; y < border_scale; y++)
+			{
+				int y_pix = yOffs + sign*y + i*(box_height-1);
+				if (y_pix < 0 || y_pix >= height) continue;
+				for (int x = 0; x < box_width; x++)
+				{
+					int x_pix = xOffs + x;
+					if (x_pix < 0 || x_pix >= width) continue;
+					pixels[x_pix + y_pix*width] = border_col;
+				}
+			}
+			
+			sign *= -1;
+		}
+		
+		sign = 1;
+		for (int i = 0; i < 2; i++)
+		{
+			for (int y = 0; y < box_height; y++)
+			{
+				int y_pix = yOffs + y;
+				if (y_pix < 0 || y_pix >= height) continue;
+				for (int x = 0; x < border_scale; x++)
+				{
+					int x_pix = xOffs + sign*x + i*(box_width - 1);
+					if (x_pix < 0 || x_pix >= width) continue;
+					pixels[x_pix + y_pix*width] = border_col;
+				}
+			}
+			
+			sign *= -1;
+		}
+	}
+	
 	// draw bitmap
-	public void draw(Bitmap bitmap, int xOffs, int yOffs)
+	// at xoffs and yoffs, with scale multipled - to make bigger
+	public void draw(Bitmap bitmap, int xOffs, int yOffs, int scale)
 	{
 		for (int y = 0; y < bitmap.height; y++)
 		{
-			int yPix = y+yOffs;
+			int yPix = scale*y + yOffs;
 			if (yPix < 0 || yPix >= height) continue;
 			for (int x = 0; x < bitmap.width; x++)
 			{
-				int xPix = x+xOffs;
+				int xPix = scale*x + xOffs;
 				if (xPix < 0 || xPix >= width) continue;
 				
 				int src = bitmap.pixels[x + y * bitmap.width];
 				if (src != IGNORE_COL && src != IGNORE_COL2)
-					pixels[xPix + yPix*width] = src;
+				{
+					for (int i = 0; i < scale; i++)
+					{
+						for (int j = 0; j < scale; j++)
+						{
+							pixels[xPix + i + (yPix + j)*width] = src;
+						}
+					}
+				}
 			}
 		}
 	}

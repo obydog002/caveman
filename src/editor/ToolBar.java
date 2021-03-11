@@ -1,4 +1,4 @@
-package editor;
+package src.editor;
 
 import java.awt.*;
 import javax.swing.*;
@@ -6,9 +6,14 @@ import java.awt.image.*;
 
 public class ToolBar extends JToolBar
 {
-	public ToolBar()
+	// for ActionListener stuff
+	MainPanel main_panel;
+	
+	public ToolBar(MainPanel main_panel)
 	{
 		super("Editor Bar");
+		
+		this.main_panel = main_panel;
 		
 		GridLayout layout = new GridLayout(0, 2);
 		
@@ -28,6 +33,8 @@ public class ToolBar extends JToolBar
 		{
 			ImageIcon icon = new ImageIcon(MainPanel.RES[i]);
 			JButton button = new JButton(icon);
+			button.addActionListener(main_panel);
+			button.setActionCommand((i + 1) + "");
 			panel.add(button);
 		}
 	}

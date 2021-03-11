@@ -1,4 +1,4 @@
-package game;
+package src.game;
 
 import java.awt.event.*;
 
@@ -125,8 +125,10 @@ public class Input implements KeyListener
 		if (ke.getKeyCode() == KeyEvent.VK_RIGHT) right.toggle(pressed);
 		
 		if (ke.getKeyCode() == KeyEvent.VK_SPACE) use.toggle(pressed);
+		if (ke.getKeyCode() == KeyEvent.VK_ENTER) use.toggle(pressed);
 		
 		if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) pause.toggle(pressed);
+		if (ke.getKeyCode() == KeyEvent.VK_P) pause.toggle(pressed);
 		
 		if (ke.getKeyCode() == KeyEvent.VK_R) die.toggle(pressed);
 	}

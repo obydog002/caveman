@@ -1,4 +1,4 @@
-package game;
+package src.game;
 
 public class MovableWall extends Entity
 {

@@ -1,4 +1,4 @@
-package game;
+package src.game;
 
 public class Mob extends Entity
 {
@@ -56,7 +56,7 @@ public class Mob extends Entity
 		
 		if (len > 0)
 		{
-			int x = Main.rng.nextInt(len);
+			int x = Game.rng.nextInt(len);
 			int c = 0;
 			for (int q = 0; q < 4; q++)
 			{
@@ -70,7 +70,7 @@ public class Mob extends Entity
 					c++;
 				}
 			}
-			if (lastMove && lastdir != -1 && checkMove(game, dir[lastdir]) && Main.rng.nextInt(25) > 1)
+			if (lastMove && lastdir != -1 && checkMove(game, dir[lastdir]) && Game.rng.nextInt(25) > 1)
 				direction = lastdir;
 			lastdir = direction;
 			lastMove = tryMove(game, dir[direction], direction);	
