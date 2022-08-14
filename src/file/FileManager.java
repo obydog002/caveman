@@ -12,8 +12,8 @@ public class FileManager
 	public static final String RES_PATH = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "/res/";
 	
 	// caveman level header
-	public static final byte[] CVL_HEADER = ("\221" + "CVL\r\n" + "\032" + "\n").getBytes();
-	
+	//public static final byte[] CVL_HEADER = ("\221" + "CVL\r\n" + "\032" + "\n").getBytes();
+	public static final byte[] CVL_HEADER = {0x3f, 0x43, 0x56, 0x4c, 0x0d, 0x0a, 0x1a, 0x0a};
 	// caveman campaign save header
 	public static final byte[] SAV_HEADER = ("\221" + "SAV\r\n" + "\032" + "\n").getBytes();
 	
@@ -64,21 +64,21 @@ public class FileManager
 			
 			// check if header is right
 			if (!header_match)
-				return null;
+				throw new Exception(file.getName() + " is not a caveman level file!");
 			
 			if ((b = reader.read()) == -1)
-				return null;
+				throw new Exception("Could not read width!");
 			int width = b;
 			
 			if ((b = reader.read()) == -1)
-				return null;
+				throw new Exception("Could not read height!");
 			int height = b;
 			
 			int[] entities = new int[width*height];
 			for (int i = 0; i < width*height; i++)
 			{
 				if ((b = reader.read()) == -1)
-					return null;
+					throw new Exception("Could not read entities");
 				
 				entities[i] = b;
 			}
@@ -93,11 +93,10 @@ public class FileManager
 			{
 				char c = (char)b;
 				level_name += c;
-				//System.out.print(c);
 			}
 			
 			if (level_name.length() != name_length)
-				return null;
+				throw new Exception("Unexpected name length!");
 			
 			return new Level(width, height, entities, level_name);
 		}

@@ -128,7 +128,7 @@ public class Game
 		
 		level_name = level.name;
 		
-		word = "level: " + level.name + " go!";
+		word = "level: " + level_name + " go!";
 		
 		// +1 for the item bar at the bottom
 		main.reset_pixels(level.width, level.height + 1);

@@ -34,7 +34,7 @@ public class Art
 	// background
 	public static Bitmap rockBackground = loadBitmap(BACKGROUND_PATH, "rockBackground.png");
 	
-	public static Bitmap toolBar = loadBitmap(BACKGROUND_PATH, "toolBar.png");
+	public static Bitmap toolBar = loadBitmap(BACKGROUND_PATH, "toolbar.png");
 	
 	public static Bitmap alphabet = loadBitmap(RES_PATH, "alphabet.png");
 	
