@@ -41,13 +41,6 @@ public class Input implements KeyListener
 			{
 				press_initial = true;
 			}
-			
-			/*if (press_initial)
-			{
-				System.out.println("\n\ndebug----------D3 B U GG");
-				System.out.println("first press");
-				System.out.println("debug----------o0 x d zz\n\n");
-			}*/
 		}
 		
 		public void tick() 
@@ -80,7 +73,8 @@ public class Input implements KeyListener
 	public Key use = new Key();
 	public Key pause = new Key();
 	public Key die = new Key();
-	
+	public Key quit = new Key();
+
 	public void releaseAll() 
 	{
 		for (int i = 0; i < keys.size(); i++) 
@@ -131,5 +125,6 @@ public class Input implements KeyListener
 		if (ke.getKeyCode() == KeyEvent.VK_P) pause.toggle(pressed);
 		
 		if (ke.getKeyCode() == KeyEvent.VK_R) die.toggle(pressed);
+		if (ke.getKeyCode() == KeyEvent.VK_Q) quit.toggle(pressed);
 	}
 }

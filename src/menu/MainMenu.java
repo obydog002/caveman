@@ -16,8 +16,8 @@ import java.awt.Rectangle;
 public class MainMenu extends Menu
 {
 	String header = "caveman";
-	String all_options[] = {"new campaign", "continue campaign", "custom levels", "level editor", "tutorial", "options", "quit"};
-	
+	String all_options[] = {"new campaign", "continue campaign", "quit"};
+
 	// length of options
 	int options_len = 0;
 	
@@ -101,15 +101,13 @@ public class MainMenu extends Menu
 		int box_inner_col = 0xFFBCBCBC;
 		int box_outer_col = 0xFF919191;
 		int box_outer_scale = 6;
-		
+
 		int options_col = 0xFFE85353;
 		int i = 0;
 		for (String s : options)
 		{
 			Rectangle rect = options_bounding_boxes.get(i);
 			
-			// check if its the current selection,
-			// and draw a box with selection color
 			if (selection == i)
 			{
 				screen.draw_box(rect.x, rect.y, rect.width, rect.height, screen.darken(box_inner_col, 0.5), screen.darken(box_outer_col, 0.5), box_outer_scale);
@@ -157,7 +155,6 @@ public class MainMenu extends Menu
 			}
 			else if (selection == 0) // new campaign
 			{
-				System.out.println("new campaign");
 				main.set_new_campaign_menu();
 				
 				/*byte[] campaign_marker = new byte[4];
@@ -171,34 +168,9 @@ public class MainMenu extends Menu
 				
 				FileManager.write_campaign_save_file(FileManager.RES_PATH + "/saves/", "test.SAV", campaign_marker, level, name);*/
 			}
-			else if (selection == 1) // custom level
+			else if (selection == 1) // quit
 			{
-				System.out.println("custom level");
-			}
-			else if (selection == 2) // level editor
-			{
-				System.out.println("Editor");
-				String[] result = FileManager.poll_campaign_save_files(FileManager.RES_PATH + "/saves/");
-				
-				if (result != null)
-				{
-					for (int i = 0; i < result.length; i++)
-					{
-						System.out.println(result[i]);
-					}
-				}
-			}
-			else if (selection == 3) // tutorial 
-			{
-				System.out.println("tutorial");
-			}
-			else if (selection == 4) // options
-			{
-				System.out.println("options");
-			}
-			else if (selection == 5) // quit
-			{
-				System.out.println("quit");
+				main.stop();
 			}
 		}
 	}

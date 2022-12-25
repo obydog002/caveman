@@ -211,7 +211,7 @@ public class Game
 					if (input.pause.press_initial())
 					{
 						state = State.PAUSE;
-						word = "paused! press esc to unpause";
+						word = "paused! press esc to unpause, q to quit, r to restart the level";
 						wordCol = normCol;
 					}
 					else
@@ -234,7 +234,7 @@ public class Game
 							// campaign is over
 							if (campaign.level == max_level)
 							{
-								
+								campaign.level = 1;	
 							}
 							else
 							{
@@ -276,6 +276,23 @@ public class Game
 					{
 						state = State.GAMEPLAY;
 					}
+					if (input.quit.press_initial())
+					{
+						main.set_main_menu();
+					}
+					if (input.die.press_initial())
+					{
+						player.dead = true;
+						player.move(-1,-1);
+						
+						wordCol = deadCol;
+						word = "dead!";
+						
+						clubs = 0;
+						
+						state = State.DIE;
+						time = 2*Constants.SECOND;
+					}	
 					break;
 		}
 	}

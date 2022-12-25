@@ -12,12 +12,6 @@ public class Main
 	
 	public static void create_and_show_GUI(String[] args)
 	{
-		/*if (arg.length > 0)
-		{
-			level = Integer.parseInt(arg[0]);
-		}*/
-		
-		// can add argument passing later, and other options
 		GameMain main = new GameMain(); 
 		frame = new JFrame("Caveman");
 		
@@ -30,8 +24,6 @@ public class Main
 		
 		frame.setSize(dim);
 		frame.setPreferredSize(dim);
-		//frame.setMinimumSize(dim);
-		//frame.setMaximumSize(dim);
 		
 		frame.add(main);
 		frame.pack();

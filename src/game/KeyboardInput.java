@@ -2,7 +2,7 @@ package src.game;
 
 import java.awt.event.*;
 
-// simple class represent keyboard input for example if inputting names
+// simple class represent keyboard input
 public class KeyboardInput implements KeyListener
 {
 	// keyboard a-z keys, space, bspace, enter

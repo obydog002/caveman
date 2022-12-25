@@ -80,7 +80,12 @@ public class GameMain extends Canvas implements Runnable
 	}
 	
 	// changing menu functions
-	
+
+	public void set_main_menu()
+	{
+		menu = new MainMenu(this, input, menu_screen.get_width(), menu_screen.get_height());
+	}
+
 	// newcampaign menu
 	public void set_new_campaign_menu()
 	{
@@ -93,7 +98,6 @@ public class GameMain extends Canvas implements Runnable
 		
 	}
 	
-	// Absolutely not the right way to do this, but oh well
 	public void reset_pixels(int width, int height)
 	{
 		this.width = width;
@@ -126,60 +130,58 @@ public class GameMain extends Canvas implements Runnable
 			e.printStackTrace();
 		}
 	}
-	
+
+	public final double OneMillion = 1000000.0d;
+	public double ms_get_current_time()
+	{
+		return System.nanoTime() / OneMillion;
+	}
+
+	public void loop()
+	{
+		double ms_previous = ms_get_current_time();
+		//final double MsPerUpdate = 1.0d / 120.0d;
+		final double MsPerUpdate = 10.0d;
+		double lag = 0.0;
+		double fps_time = ms_previous;
+		int render_ticks = 0;
+		int system_ticks = 0;
+		while (true)
+		{
+			double ms_current = ms_get_current_time();
+			double ms_elapsed = ms_current - ms_previous;
+			ms_previous = ms_current;
+			lag += ms_elapsed;
+
+			if (fps_time + 1000 < ms_current)
+			{
+				System.out.println(render_ticks + " " + system_ticks + " " + ms_elapsed);
+				render_ticks = 0;
+				system_ticks = 0;
+				fps_time = ms_previous;
+			}
+
+			while (lag >= MsPerUpdate)
+			{
+				input.tick();
+				tick();
+				system_ticks++;
+				lag -= MsPerUpdate;
+			}
+
+
+			render();
+			render_ticks++;
+		}
+	}
+
 	public void run()
 	{
-		int frames = 0;
-		double unprocessedSeconds = 0;
-		long lastTime = System.nanoTime();
-		double secondsPerTick = 1.0 / (double)Constants.TICKS_PER_SECOND;
-		int tickCount = 0;
-
-		while (running) 
-		{
-			long now = System.nanoTime();
-			long passedTime = now - lastTime;
-			lastTime = now;
-			if (passedTime < 0) passedTime = 0;
-			if (passedTime > 1000000000) passedTime = 1000000000;
-			unprocessedSeconds += passedTime / 1000000000.0;
-			boolean ticked = false;
-			while (unprocessedSeconds > secondsPerTick) 
-			{
-				tick();
-				unprocessedSeconds -= secondsPerTick;
-				ticked = true;
-				tickCount++;
-				/*if (tickCount % Constants.TICKS_PER_SECOND == 0) 
-				{
-					System.out.println(frames + " fps");
-					lastTime += 1000;
-					frames = 0;
-				}*/
-			}
-			if (ticked) 
-			{
-				render();
-				frames++;
-			} 
-			/*else 
-			{
-				try 
-				{
-					Thread.sleep(1);
-				} 
-				catch (InterruptedException e) 
-				{
-					e.printStackTrace();
-				}
-			}*/
-		}
+		loop();
 	}
 	
 	public void tick()
 	{
-		input.tick();
-		
 		// do menu tick if there is a current menu
 		if (menu != null)
 		{
@@ -190,7 +192,7 @@ public class GameMain extends Canvas implements Runnable
 			game.tick();
 		}
 	}
-	
+
 	public void render()
 	{
 		BufferStrategy bs = getBufferStrategy();

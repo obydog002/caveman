@@ -22,6 +22,7 @@ public class Mob extends Entity
 		dead = false;
 		lastMove = false;
 	}
+
 	public boolean tryPush(Game game, int direction) // check if this can be pushed.
 	{
 		if (!crushable) return false;
@@ -35,12 +36,14 @@ public class Mob extends Entity
 		}
 		return true;
 	}
+
 	public boolean push(Game game, Entity e, int dir) // check if push is possible with the current direction
 	{
 		if (!canMoveBlocks || !e.pushable()) return false;
 		return e.tryPush(game, dir);
 		
 	}
+
 	public boolean checkMove(Game game, Entity e)
 	{
 		return e == null || e.passable() || (e == game.player && isHostile()) || e.pushable();
@@ -50,13 +53,14 @@ public class Mob extends Entity
 	{
 		Entity[] dir = checkDirection(game);
 		int direction = 0;
-		int len = 0;
+		int possible_move_count = 0;
 		for (int i = 0; i < 4; i++)
-			if ( checkMove(game, dir[i]) ) len++;
+			if (checkMove(game, dir[i])) 
+				possible_move_count++;
 		
-		if (len > 0)
+		if (possible_move_count > 0)
 		{
-			int x = Game.rng.nextInt(len);
+			int x = Game.rng.nextInt(possible_move_count);
 			int c = 0;
 			for (int q = 0; q < 4; q++)
 			{
@@ -82,8 +86,6 @@ public class Mob extends Entity
 	
 	public void findPlayer(Game game) // tracks the player
 	{
-		boolean movedHoz = false;
-		boolean movedVert = false;
 		int playerX = game.player.getX();
 		int playerY = game.player.getY();
 		int x = this.getX();
@@ -92,25 +94,52 @@ public class Mob extends Entity
 		int dirY = (y > playerY) ? 1 : 3;
 		int moveX = (dirX == 0) ? -1 : 1;
 		int moveY = (dirY == 1) ? -1 : 1;
-		// pick the move that will bring it closer.
-		double dist = Math.sqrt( (moveX + x - playerX)*(moveX + x - playerX) + (y - playerY)*(y - playerY));
-		double dist2 = Math.sqrt( (x - playerX)*(x - playerX) + (moveY + y - playerY)*(moveY + y - playerY));
+		int cand_x_pos = moveX + x;
+		int cand_y_pos = moveY + y;
+
+		// Taxicab distance
+		double horz_dist = Math.abs(cand_x_pos - playerX) + Math.abs(y - playerY);
+		double vert_dist = Math.abs(cand_y_pos - playerY) + Math.abs(x - playerX);
 		Entity dir[] = checkDirection(game);
-		boolean xch = checkMove(game, dir[dirX]);
-		boolean ych = checkMove(game, dir[dirY]);
-		if (dist <= dist2)
+
+		if (horz_dist < vert_dist) // try horizontal first
 		{
-			movedHoz = tryMove(game, dir[dirX], dirX);
+			if (tryMove(game, dir[dirX], dirX))
+				return;
+			
+			if (tryMove(game, dir[dirY], dirY))
+				return;
 		}
-		else 
+		else if (horz_dist == vert_dist) // randomly pick
 		{
-			movedVert = tryMove(game, dir[dirY], dirY);
+			int r = Game.rng.nextInt(2);
+			if (r == 0)
+			{
+				if (tryMove(game, dir[dirX], dirX))
+					return;
+
+				if (tryMove(game, dir[dirY], dirY))
+					return;
+			}
+			else
+			{
+				if (tryMove(game, dir[dirY], dirY))
+					return;
+
+				if (tryMove(game, dir[dirX], dirX))
+					return;
+			}
 		}
-		if (!movedHoz && !movedVert)
+		else  // try vertical first
 		{
-			tryMove(game, dir[dirY], dirY);
+			if (tryMove(game, dir[dirY], dirY))
+				return;
+
+			if (tryMove(game, dir[dirX], dirX))
+				return;
 		}
 	}
+
 	public boolean tryMove(Game game, Entity e, int direction)
 	{
 		if (checkMove(game, e))
@@ -131,6 +160,7 @@ public class Mob extends Entity
 		}
 		return false;
 	}
+
 	public void tick(Game game)
 	{
 		if (time > 0)
