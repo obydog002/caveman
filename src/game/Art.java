@@ -19,7 +19,7 @@ public class Art
 	public static Bitmap red = loadBitmap(ENTITIES_PATH, "red.png");
 	public static Bitmap green = loadBitmap(ENTITIES_PATH, "green.png");
 	public static Bitmap yellow = loadBitmap(ENTITIES_PATH, "yellow.png");
-	public static Bitmap exit = loadBitmap(ENTITIES_PATH, "exit2.png");
+	public static Bitmap exit = loadBitmap(ENTITIES_PATH, "exit3.png");
 	public static Bitmap club = loadBitmap(ENTITIES_PATH, "club.png");
 	
 	public static Bitmap boulder = loadBitmap(ENTITIES_PATH, "boulder.png");

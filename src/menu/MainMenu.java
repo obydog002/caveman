@@ -170,7 +170,7 @@ public class MainMenu extends Menu
 			}
 			else if (selection == 1) // quit
 			{
-				main.stop();
+				main.request_exit();
 			}
 		}
 	}

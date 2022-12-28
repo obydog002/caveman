@@ -8,6 +8,7 @@ import src.menu.*;
 
 import java.awt.image.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
@@ -23,6 +24,7 @@ public class GameMain extends Canvas implements Runnable
 	private boolean running;
 	private Thread thread;
 	
+	private JFrame parent;
 	private Game game = null;
 	
 	// current menu, could be options, whatever
@@ -44,8 +46,9 @@ public class GameMain extends Canvas implements Runnable
 	
 	public static Random rng;
 	
-	public GameMain()
+	public GameMain(JFrame parent)
 	{	
+		this.parent = parent;
 		// usual input for game play
 		input = new Input();
 		
@@ -123,12 +126,26 @@ public class GameMain extends Canvas implements Runnable
 		running = false;
 		try
 		{
+			System.out.println("stop1");
 			thread.join();
+			System.out.println("stop2");
 		}
 		catch (InterruptedException e)
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public synchronized void exit()
+	{
+		running = false;
+		parent.dispatchEvent(new WindowEvent(parent, WindowEvent.WINDOW_CLOSING));
+	}
+
+	private boolean should_exit = false;
+ 	public void request_exit()
+	{
+		should_exit = true;
 	}
 
 	public final double OneMillion = 1000000.0d;
@@ -137,16 +154,17 @@ public class GameMain extends Canvas implements Runnable
 		return System.nanoTime() / OneMillion;
 	}
 
-	public void loop()
+	public void run()
 	{
 		double ms_previous = ms_get_current_time();
-		//final double MsPerUpdate = 1.0d / 120.0d;
 		final double MsPerUpdate = 10.0d;
 		double lag = 0.0;
 		double fps_time = ms_previous;
 		int render_ticks = 0;
 		int system_ticks = 0;
-		while (true)
+		int counter = 0;
+
+		while (running)
 		{
 			double ms_current = ms_get_current_time();
 			double ms_elapsed = ms_current - ms_previous;
@@ -169,15 +187,14 @@ public class GameMain extends Canvas implements Runnable
 				lag -= MsPerUpdate;
 			}
 
-
 			render();
 			render_ticks++;
-		}
-	}
 
-	public void run()
-	{
-		loop();
+			if (should_exit)
+			{
+				exit();
+			}
+		}
 	}
 	
 	public void tick()
