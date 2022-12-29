@@ -5,7 +5,8 @@ public class Bitmap
 	// colors that the bitmap drawing will ignore, resulting in completely transparent at that location
 	public static final int IGNORE_COL = 0xFEFF00FF;
 	public static final int IGNORE_COL2 = 0xFEFFFF00;
-	
+	public static final int IGNORE_COL3 = 0xFFFF00FF;
+
 	// color inside the char to be replaced with char color
 	public static final int CHAR_INSIDE_COL = 0xFE00FFFF;
 	
@@ -125,7 +126,7 @@ public class Bitmap
 				if (xPix < 0 || xPix >= width) continue;
 				
 				int src = Art.alphabet.pixels[(bitx + x) + (bity + y) * Art.alphabet.width];
-				if (src != IGNORE_COL && src != IGNORE_COL2)
+				if (src != IGNORE_COL && src != IGNORE_COL2 && src != IGNORE_COL3)
 				{
 					if (src == CHAR_INSIDE_COL) 
 						src = col;
@@ -213,7 +214,7 @@ public class Bitmap
 				if (xPix < 0 || xPix >= width) continue;
 				
 				int src = bitmap.pixels[x + y * bitmap.width];
-				if (src != IGNORE_COL && src != IGNORE_COL2)
+				if (src != IGNORE_COL && src != IGNORE_COL2 && src != IGNORE_COL3)
 				{
 					for (int i = 0; i < scale; i++)
 					{

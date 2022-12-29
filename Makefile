@@ -9,14 +9,14 @@ EDITOR_TARGET = src/editor/EditorMain.class
 all: $(GAME_TARGET) $(EDITOR_TARGET)
 
 $(GAME_TARGET) : $(FILE_SRC) $(MENU_SRC) $(GAME_SRC)
-	javac src/game/*.java
+	javac src/game/*.java --release 8
 
 $(EDITOR_TARGET) : $(FILE_SRC) $(EDITOR_SRC)
-	javac src/editor/*.java
+	javac src/editor/*.java --release 8
 
 .PHONY: clean
 clean:
-	rm src/file/*.class 
-	rm src/editor/*.class
-	rm src/menu/*.class
-	rm src/game/*.class
+	rm -f src/file/*.class 
+	rm -f src/editor/*.class
+	rm -f src/menu/*.class
+	rm -f src/game/*.class
