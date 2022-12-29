@@ -1,5 +1,7 @@
 package src.game;
 
+import java.awt.image.BufferedImage;
+
 public class Mob extends Entity
 {
 	// Movable entity, such as the player or a mammoth.
@@ -11,7 +13,7 @@ public class Mob extends Entity
 	boolean lastMove;
 	
 	int lastdir = -1;
-	public Mob(int x, int y, int timeToMove, boolean hostile, boolean canMoveBlocks, boolean track, Bitmap image)
+	public Mob(int x, int y, int timeToMove, boolean hostile, boolean canMoveBlocks, boolean track, BufferedImage image)
 	{
 		super(x,y,hostile,image);
 		this.timeToMove = timeToMove;

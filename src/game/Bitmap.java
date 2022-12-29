@@ -1,5 +1,6 @@
 package src.game;
 
+
 public class Bitmap
 {
 	// colors that the bitmap drawing will ignore, resulting in completely transparent at that location
@@ -81,6 +82,7 @@ public class Bitmap
 	// TODO - GET RID OF ALL THESE MAGIC NUMBERS!!! USE ENUM OR SOMETHING IDIOT
 	public void drawChar(int c, int xOffs, int yOffs, int col, int scale)
 	{
+		/*
 		int bitx = 288;
 		int bity = 96;
 		if (c == 32) // SPACE
@@ -143,6 +145,7 @@ public class Bitmap
 				}
 			}
 		}
+		*/
 	}
 	
 	// draw a box with a border colour, and inside colour, and scale for outside border

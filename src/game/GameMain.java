@@ -236,7 +236,7 @@ public class GameMain extends Canvas implements Runnable
 		}
 		else // game is going now so draw it
 		{
-			screen.render(game);
+			/*screen.render(game);
 		
 			for (int i = 0; i < Constants.SCALE*Constants.SCALE*width*height; i++)
 			{
@@ -244,7 +244,8 @@ public class GameMain extends Canvas implements Runnable
 			}
 		
 			g.fillRect(0, 0, getWidth(), getHeight());
-			g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
+			g.drawImage(img, 0, 0, getWidth(), getHeight(), null);*/
+			game.render(g, getWidth(), getHeight());
 		}
 		
 		g.dispose();

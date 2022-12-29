@@ -8,6 +8,8 @@ import src.file.CampaignSave;
 
 import java.util.ArrayList;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.awt.Graphics;
 
 public class Game
 {
@@ -25,11 +27,12 @@ public class Game
 	int time = 2*Constants.SECOND;
 	
 	ArrayList<Entity> entities;
+
 	ArrayList<Entity> garbage;
 	
 	Entity exit;
 	Player player;
-	Bitmap background;
+	BufferedImage background;
 	
 	Input input;
 	GameMain main;
@@ -57,6 +60,9 @@ public class Game
 	
 	public static Random rng = new Random();
 	
+	int level_width = 20;
+	int level_height = 20;
+
 	// default constructor
 	// shouldnt be used as it has no level or campaign information
 	public Game(Input input, GameMain main)
@@ -128,6 +134,8 @@ public class Game
 		
 		level_name = level.name;
 		
+		level_width = level.width;
+		level_height = level.height;
 		word = "level: " + level_name + " go!";
 		
 		// +1 for the item bar at the bottom
@@ -327,5 +335,16 @@ public class Game
 		
 		entities.removeAll(garbage);
 		garbage.clear();
+	}
+
+	public void render(Graphics g, int width, int height)
+	{
+		g.drawImage(background, 0, 0, width, height, null);
+		double ent_stride_width = (double)width/level_width;
+		double ent_stride_height = (double)height/level_height;
+		for (Entity e : entities)
+		{
+			g.drawImage(e.getImage(), (int)(ent_stride_width * e.getX()), (int)(ent_stride_height * e.getY()), (int)ent_stride_width, (int)ent_stride_height, null);
+		}
 	}
 }

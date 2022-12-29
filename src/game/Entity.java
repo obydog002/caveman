@@ -1,5 +1,7 @@
 package src.game;
 
+import java.awt.image.BufferedImage;
+
 public class Entity
 {
 	// entity position
@@ -7,14 +9,14 @@ public class Entity
 	private int y;
 	int id = 0;
 	
-	private Bitmap image;
+	private BufferedImage image;
 	private boolean passable; //dictates whether it can be passed
 	private boolean hostile; // whether it can kill the player
 	private boolean pushable; // whether it can be pushed
 	private boolean breakable; // whether it can be broken with a club
 	boolean dead;
 	
-	public Entity(int x, int y, boolean hostile, Bitmap image)
+	public Entity(int x, int y, boolean hostile, BufferedImage image)
 	{
 		this.x = x;
 		this.y = y;
@@ -133,7 +135,7 @@ public class Entity
 		return y;
 	}
 	
-	public Bitmap getImage()
+	public BufferedImage getImage()
 	{
 		return image;
 	}

@@ -19,7 +19,7 @@ public class Screen extends Bitmap
 	
 	public void render(Game game)
 	{
-		int inv_height = (unscaled_height - 1)*scale;
+		/*int inv_height = (unscaled_height - 1)*scale;
 		
 		draw(game.background,0,0, 1);
 		draw(Art.toolBar,0,inv_height, 1);
@@ -37,7 +37,7 @@ public class Screen extends Bitmap
 		{
 			darken(.2);
 			draw(game.word,(int)(scale *(unscaled_width / 2.0 - 0.5*(game.word.length() - 1))),unscaled_width * (unscaled_height/2 - 1),game.wordCol, 1);
-		}
+		}*/
 	}
 
 	

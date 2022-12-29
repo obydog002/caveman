@@ -2,13 +2,15 @@ package src.game;
 
 import java.awt.event.*;
 
+import java.awt.image.BufferedImage;
+
 public class Player extends Mob
 {
 	boolean[] keys;
 	int direction;
 	int clubTimer;
 	
-	public Player(int x, int y, int timeToMove, Bitmap image)
+	public Player(int x, int y, int timeToMove, BufferedImage image)
 	{
 		super(x,y,timeToMove,false,true,false,image);
 		direction = -1;
