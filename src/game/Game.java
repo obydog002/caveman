@@ -344,7 +344,15 @@ public class Game
 		double ent_stride_height = (double)height/level_height;
 		for (Entity e : entities)
 		{
-			g.drawImage(e.getImage(), (int)(ent_stride_width * e.getX()), (int)(ent_stride_height * e.getY()), (int)ent_stride_width, (int)ent_stride_height, null);
+			double xx_left = ent_stride_width * e.getX();
+			double xx_right = ent_stride_width * (e.getX() + 1);
+			double yy_top = ent_stride_height * e.getY();
+			double yy_bot = ent_stride_height * (e.getY() + 1);
+			int ent_x = (int)Math.round(xx_left);
+			int ent_y = (int)Math.round(yy_top);
+			int ent_width = (int)Math.round(xx_right - xx_left);
+			int ent_height = (int)Math.round(yy_bot - yy_top);
+			g.drawImage(e.getImage(), ent_x, ent_y, ent_width, ent_height, null);
 		}
 	}
 }
