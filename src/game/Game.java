@@ -337,9 +337,10 @@ public class Game
 		garbage.clear();
 	}
 
-	public void render(Graphics g, int width, int height)
+	private void render_game(Graphics g, int width, int height)
 	{
 		g.drawImage(background, 0, 0, width, height, null);
+
 		double ent_stride_width = (double)width/level_width;
 		double ent_stride_height = (double)height/level_height;
 		for (Entity e : entities)
@@ -354,5 +355,18 @@ public class Game
 			int ent_height = (int)Math.round(yy_bot - yy_top);
 			g.drawImage(e.getImage(), ent_x, ent_y, ent_width, ent_height, null);
 		}
+	}
+
+	private void render_toolbar(Graphics g, int x_left, int y_top, int width, int height)
+	{
+		g.drawImage(Art.toolBar, x_left, y_top, width, height, null);
+	}
+
+	public void render(Graphics g, int width, int height)
+	{
+		int game_height = (int)Math.round((level_height - 1.0d)/((double)level_height) * ((double)height));
+		render_game(g, width, game_height);
+		int tool_bar = (int)Math.round(1.0d/level_height * height);
+		render_toolbar(g, 0, game_height, width, (int)Math.round(tool_bar_height));
 	}
 }
