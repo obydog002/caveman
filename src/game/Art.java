@@ -38,11 +38,30 @@ public class Art
 	
 	public static BufferedImage alphabet = loadImage(RES_PATH, "alphabet.png");
 	
+	public final static int IgnoreCol = (0x00FF00FF << 8);
+	public static void write_image_transparency(BufferedImage img)
+	{
+		int width = img.getWidth();
+		int height = img.getHeight();
+		int pixels[] = new int[width * height];
+		img.getRGB(0, 0, width, height, pixels, 0, width);
+		for (int i = 0; i < pixels.length; i++)
+		{
+			if ((pixels[i] << 8) == IgnoreCol)
+			{
+				pixels[i] = 0x00000000;
+			}
+		}
+		img.setRGB(0, 0, width, height, pixels, 0, width);
+	}
+
 	public static BufferedImage loadImage(String path, String filename)
 	{
 		try
 		{
-			return ImageIO.read(new File(path + filename));
+			BufferedImage img = ImageIO.read(new File(path + filename));
+			write_image_transparency(img);
+			return img;
 		}
 		catch (Exception e)
 		{

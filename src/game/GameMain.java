@@ -126,9 +126,7 @@ public class GameMain extends Canvas implements Runnable
 		running = false;
 		try
 		{
-			System.out.println("stop1");
 			thread.join();
-			System.out.println("stop2");
 		}
 		catch (InterruptedException e)
 		{
@@ -187,14 +185,6 @@ public class GameMain extends Canvas implements Runnable
 				lag -= MsPerUpdate;
 			}
 
-			try
-			{
-				Thread.sleep(1);
-			}
-			catch (Exception e)
-			{
-				
-			}
 			render();
 			render_ticks++;
 
