@@ -366,7 +366,7 @@ public class Game
 	{
 		int game_height = (int)Math.round((level_height - 1.0d)/((double)level_height) * ((double)height));
 		render_game(g, width, game_height);
-		int tool_bar = (int)Math.round(1.0d/level_height * height);
+		int tool_bar_height = (int)Math.round(1.0d/level_height * height);
 		render_toolbar(g, 0, game_height, width, (int)Math.round(tool_bar_height));
 	}
 }

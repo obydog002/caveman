@@ -187,6 +187,14 @@ public class GameMain extends Canvas implements Runnable
 				lag -= MsPerUpdate;
 			}
 
+			try
+			{
+				Thread.sleep(1);
+			}
+			catch (Exception e)
+			{
+				
+			}
 			render();
 			render_ticks++;
 
