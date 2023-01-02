@@ -152,6 +152,7 @@ public class GameMain extends Canvas implements Runnable
 		return System.nanoTime() / OneMillion;
 	}
 
+	private BufferStrategy strategy;
 	public void run()
 	{
 		double ms_previous = ms_get_current_time();
@@ -162,6 +163,8 @@ public class GameMain extends Canvas implements Runnable
 		int system_ticks = 0;
 		int counter = 0;
 
+		createBufferStrategy(2);
+		strategy = getBufferStrategy();
 		while (running)
 		{
 			double ms_current = ms_get_current_time();
@@ -210,43 +213,32 @@ public class GameMain extends Canvas implements Runnable
 
 	public void render()
 	{
-		BufferStrategy bs = getBufferStrategy();
-		if (bs == null)
+		do
 		{
-			createBufferStrategy(3);
-			return;
-		}
-		
-		Graphics g = bs.getDrawGraphics();
-		
-		// menu should be drawn
-		if (menu != null)
-		{
-			menu.render(menu_screen);
-			
-			for (int i = 0; i < menu_pixels.length; i++)
+			do
 			{
-				menu_pixels[i] = menu_screen.pixels[i];
-			}
-			
-			g.fillRect(0, 0, getWidth(), getHeight());
-			g.drawImage(menu_img, 0, 0, getWidth(), getHeight(), null);
-		}
-		else // game is going now so draw it
-		{
-			/*screen.render(game);
-		
-			for (int i = 0; i < Constants.SCALE*Constants.SCALE*width*height; i++)
-			{
-				pixels[i] = screen.pixels[i];
-			}
-		
-			g.fillRect(0, 0, getWidth(), getHeight());
-			g.drawImage(img, 0, 0, getWidth(), getHeight(), null);*/
-			game.render(g, getWidth(), getHeight());
-		}
-		
-		g.dispose();
-		bs.show();
+				Graphics g = strategy.getDrawGraphics();
+				
+				// menu should be drawn
+				if (menu != null)
+				{
+					menu.render(menu_screen);
+					
+					for (int i = 0; i < menu_pixels.length; i++)
+					{
+						menu_pixels[i] = menu_screen.pixels[i];
+					}
+					
+					g.fillRect(0, 0, getWidth(), getHeight());
+					g.drawImage(menu_img, 0, 0, getWidth(), getHeight(), null);
+				}
+				else 
+				{
+					game.render(g, getWidth(), getHeight());
+				}
+				g.dispose();
+			} while (strategy.contentsRestored());
+			strategy.show();
+		} while (strategy.contentsLost());
 	}
 }
