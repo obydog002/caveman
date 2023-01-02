@@ -74,8 +74,6 @@ public class Game
 		entities = new ArrayList();
 		garbage = new ArrayList();
 		
-		// tick time for movement
-		// 10 every 80 ticks
 		player = new Player(-1,-1,10,Art.player);
 		exit = new Entity(-10,-10,false,Art.exit);
 		
