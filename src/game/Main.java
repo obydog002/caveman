@@ -17,8 +17,8 @@ public class Main
 		
 		Dimension pref = Toolkit.getDefaultToolkit().getScreenSize();
 		
-		double sc_width = (3.5/4)*pref.getWidth();
-		double sc_height = (3.5/4)*pref.getHeight();
+		double sc_width = pref.getWidth();
+		double sc_height = pref.getHeight();
 		
 		Dimension dim = new Dimension((int)sc_width, (int)sc_height);
 		

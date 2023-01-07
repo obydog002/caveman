@@ -36,9 +36,11 @@ public class Art
 	
 	public static BufferedImage toolBar = loadImage(BACKGROUND_PATH, "toolbar.png");
 	
-	public static BufferedImage alphabet = loadImage(RES_PATH, "alphabet.png");
-	
+	public static fina
+	public static BufferedImage alphabet = write_alphabet_colors(loadImage(RES_PATH, "alphabet.png"), );
+
 	public final static int IgnoreCol = (0x00FF00FF << 8);
+	public final static int IgnoreCol2 = (0x00FFFF00 << 8);
 	public static void write_image_transparency(BufferedImage img)
 	{
 		int width = img.getWidth();
@@ -47,7 +49,8 @@ public class Art
 		img.getRGB(0, 0, width, height, pixels, 0, width);
 		for (int i = 0; i < pixels.length; i++)
 		{
-			if ((pixels[i] << 8) == IgnoreCol)
+			int shifted = pixels[i] << 8;
+			if (shifted == IgnoreCol || shifted == IgnoreCol2)
 			{
 				pixels[i] = 0x00000000;
 			}
