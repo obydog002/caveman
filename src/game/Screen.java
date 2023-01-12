@@ -19,19 +19,8 @@ public class Screen extends Bitmap
 	
 	public void render(Game game)
 	{
-		/*int inv_height = (unscaled_height - 1)*scale;
-		
-		draw(game.background,0,0, 1);
-		draw(Art.toolBar,0,inv_height, 1);
-		for (Entity e : game.entities)
-		{
-			draw(e.getImage(),scale * e.getX(),scale * e.getY(), 1);
-		}
-		
-		draw(Art.club,0,inv_height, 1);
-		String clubs = ":" + game.clubs;
-		draw(clubs,32,inv_height,0xff444444, 1);
-		draw(game.level_name,(int)(scale *(unscaled_width / 2.0 - 0.5*(game.level_name.length() - 1))),inv_height,0xff444444, 1);
+
+		/*draw(game.level_name,(int)(scale *(unscaled_width / 2.0 - 0.5*(game.level_name.length() - 1))),inv_height,0xff444444, 1);
 		
 		if (game.state != Game.State.GAMEPLAY)
 		{
