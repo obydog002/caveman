@@ -190,7 +190,14 @@ public class GameMain extends Canvas implements Runnable
 
 			render();
 			render_ticks++;
-
+			try
+			{
+			Thread.sleep(2);
+			}
+			catch (Exception e)
+			{
+				
+			}
 			if (should_exit)
 			{
 				exit();

@@ -358,13 +358,18 @@ public class Game
 	private void render_toolbar(Graphics g, int x_left, int y_top, int width, int height)
 	{
 		g.drawImage(Art.toolBar, x_left, y_top, width, height, null);
+
+		int tool_bar_unit_length = height;
+		g.drawImage(Art.club, x_left, y_top, tool_bar_unit_length, tool_bar_unit_length, null);
+		// g.drawString(x_left, 0, "clubs");
 	}
 
+	private final static int ToolBarUnitLength = 30;
 	public void render(Graphics g, int width, int height)
 	{
-		int game_height = (int)Math.round((level_height - 1.0d)/((double)level_height) * ((double)height));
+		int tool_bar_unit_length = width/32;
+		int game_height = height - tool_bar_unit_length;
 		render_game(g, width, game_height);
-		int tool_bar_height = (int)Math.round(1.0d/level_height * height);
-		render_toolbar(g, 0, game_height, width, (int)Math.round(tool_bar_height));
+		render_toolbar(g, 0, game_height, width, tool_bar_unit_length);
 	}
 }
