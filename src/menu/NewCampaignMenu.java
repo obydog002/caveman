@@ -1,5 +1,7 @@
 package src.menu;
 
+import java.awt.Graphics;
+import java.awt.Color;
 import src.file.CampaignSave;
 
 import src.game.KeyboardInput;
@@ -56,77 +58,6 @@ public class NewCampaignMenu extends Menu
 		
 		this.name = "";
 		this.name_length = 0;
-	}
-	
-	int header_scale = 2;
-	int header_col = 0xFFFFFFFF;
-		
-	int h2_scale = 1;
-	int h2_col = 0xFFAAEEAA;
-	
-	public void render(Screen screen)
-	{
-		screen.clear(0);
-		
-		int width = screen.get_width();
-		int height = screen.get_height();
-		
-		// name selection
-		if (state == 0)
-		{
-			int xx = width/2 - (int)(0.5*header.length()*Constants.SCALE*header_scale);
-			
-			screen.draw(header, xx, height/16, header_col, header_scale);
-			
-			String h2 = "type name max length 32 characters";
-			xx = width/2 - (int)(0.5*h2.length()*Constants.SCALE*h2_scale);
-			
-			screen.draw(h2, xx, 3*height/16, h2_col, h2_scale);
-			
-			int max_chars = 32;
-			
-			int box_width = max_chars*Constants.SCALE;
-			int box_height = Constants.SCALE;
-			
-			xx = width/2 - (int)(0.5*box_width);
-			int yy = 4*height/16;
-			
-			int box_inner_col = 0xFFBCBCBC;
-			int box_outer_col = 0xFF919191;
-			int box_outer_scale = 6;
-		
-			screen.draw_box(xx - padding_x, yy - padding_y, box_width + 2*padding_x, box_height + 2*padding_y, box_inner_col, box_outer_col, box_outer_scale);
-			
-			screen.draw(name, xx, yy, 0xFFDD1111, 1);
-			
-			if (draw_character_line)
-			{
-				xx += name_length*Constants.SCALE;
-				screen.draw_box(xx, yy, 4, box_height, 0xFF000000, 0xFF000000, 0);
-			}
-			
-			h2 = "press enter to continue";
-			
-			xx = width/2 - (int)(0.5*h2.length()*Constants.SCALE*h2_scale);
-			
-			yy = 5*height/16;
-			screen.draw(h2, xx, yy, h2_col, h2_scale);
-			
-			if (warning_timer > 0)
-			{
-				h2 = "cannot continue with an empty name!";
-				
-				xx = width/2 - (int)(0.5*h2.length()*Constants.SCALE*h2_scale);
-				
-				yy = 7*height/16;
-				screen.draw(h2, xx, yy, 0xFFFF0000, h2_scale);
-			}
-		}
-		else
-		{
-			
-		}
-	
 	}
 	
 	public void tick()
@@ -233,5 +164,83 @@ public class NewCampaignMenu extends Menu
 		{
 			main.set_campaign(new CampaignSave(campaign_marker.getBytes(), 5, name));
 		}
+	}
+
+	/*
+	int header_scale = 2;
+	int header_col = 0xFFFFFFFF;
+		
+	int h2_scale = 1;
+	int h2_col = 0xFFAAEEAA;
+	
+	public void render(Screen screen)
+	{
+		screen.clear(0);
+		
+		int width = screen.get_width();
+		int height = screen.get_height();
+		
+		// name selection
+		if (state == 0)
+		{
+			int xx = width/2 - (int)(0.5*header.length()*Constants.SCALE*header_scale);
+			
+			screen.draw(header, xx, height/16, header_col, header_scale);
+			
+			String h2 = "type name max length 32 characters";
+			xx = width/2 - (int)(0.5*h2.length()*Constants.SCALE*h2_scale);
+			
+			screen.draw(h2, xx, 3*height/16, h2_col, h2_scale);
+			
+			int max_chars = 32;
+			
+			int box_width = max_chars*Constants.SCALE;
+			int box_height = Constants.SCALE;
+			
+			xx = width/2 - (int)(0.5*box_width);
+			int yy = 4*height/16;
+			
+			int box_inner_col = 0xFFBCBCBC;
+			int box_outer_col = 0xFF919191;
+			int box_outer_scale = 6;
+		
+			screen.draw_box(xx - padding_x, yy - padding_y, box_width + 2*padding_x, box_height + 2*padding_y, box_inner_col, box_outer_col, box_outer_scale);
+			
+			screen.draw(name, xx, yy, 0xFFDD1111, 1);
+			
+			if (draw_character_line)
+			{
+				xx += name_length*Constants.SCALE;
+				screen.draw_box(xx, yy, 4, box_height, 0xFF000000, 0xFF000000, 0);
+			}
+			
+			h2 = "press enter to continue";
+			
+			xx = width/2 - (int)(0.5*h2.length()*Constants.SCALE*h2_scale);
+			
+			yy = 5*height/16;
+			screen.draw(h2, xx, yy, h2_col, h2_scale);
+			
+			if (warning_timer > 0)
+			{
+				h2 = "cannot continue with an empty name!";
+				
+				xx = width/2 - (int)(0.5*h2.length()*Constants.SCALE*h2_scale);
+				
+				yy = 7*height/16;
+				screen.draw(h2, xx, yy, 0xFFFF0000, h2_scale);
+			}
+		}
+		else
+		{
+			
+		}
+	
+	}
+	*/
+	public void render(Graphics g, int width, int height)
+	{
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, width, height);
 	}
 }

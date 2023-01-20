@@ -3,15 +3,15 @@ package src.menu;
 import src.file.FileManager;
 import src.file.CampaignSave;
 
-import src.game.Screen;
 import src.game.GameMain;
-import src.game.Input;
 import src.game.Constants;
 import src.game.Input;
 
 import java.util.ArrayList;
 
 import java.awt.Rectangle;
+import java.awt.Color;
+import java.awt.Graphics;
 
 public class MainMenu extends Menu
 {
@@ -85,46 +85,6 @@ public class MainMenu extends Menu
 		options_len = options.size();
 	}
 	
-	public void render(Screen screen)
-	{	
-		// clear screen to black
-		screen.clear(0);
-		
-		int width = screen.get_width();
-		int height = screen.get_height();
-		
-		int header_scale = 4;
-		int header_col = 0xFFE4864B;
-		
-		screen.draw(header, width/2 - (int)(0.5*header.length()*Constants.SCALE*header_scale), height/16, header_col, header_scale);
-		
-		int box_inner_col = 0xFFBCBCBC;
-		int box_outer_col = 0xFF919191;
-		int box_outer_scale = 6;
-
-		int options_col = 0xFFE85353;
-		int i = 0;
-		for (String s : options)
-		{
-			Rectangle rect = options_bounding_boxes.get(i);
-			
-			if (selection == i)
-			{
-				screen.draw_box(rect.x, rect.y, rect.width, rect.height, screen.darken(box_inner_col, 0.5), screen.darken(box_outer_col, 0.5), box_outer_scale);
-			}
-			else
-			{
-				screen.draw_box(rect.x, rect.y, rect.width, rect.height, box_inner_col, box_outer_col, box_outer_scale);
-			}
-			
-			int str_len = s.length();
-			
-			screen.draw(s, rect.x + padding_x, rect.y + padding_y, options_col, 1);
-			
-			i++;
-		}
-	}
-	
 	public void tick()
 	{
 		// move selection up the menu
@@ -173,5 +133,53 @@ public class MainMenu extends Menu
 				main.request_exit();
 			}
 		}
+	}
+
+	/*public void render(Screen screen)
+	{	
+		// clear screen to black
+		screen.clear(0);
+		
+		int width = screen.get_width();
+		int height = screen.get_height();
+		
+		int header_scale = 4;
+		int header_col = 0xFFE4864B;
+		
+		screen.draw(header, width/2 - (int)(0.5*header.length()*Constants.SCALE*header_scale), height/16, header_col, header_scale);
+		
+		int box_inner_col = 0xFFBCBCBC;
+		int box_outer_col = 0xFF919191;
+		int box_outer_scale = 6;
+
+		int options_col = 0xFFE85353;
+		int i = 0;
+		for (String s : options)
+		{
+			Rectangle rect = options_bounding_boxes.get(i);
+			
+			if (selection == i)
+			{
+				screen.draw_box(rect.x, rect.y, rect.width, rect.height, screen.darken(box_inner_col, 0.5), screen.darken(box_outer_col, 0.5), box_outer_scale);
+			}
+			else
+			{
+				screen.draw_box(rect.x, rect.y, rect.width, rect.height, box_inner_col, box_outer_col, box_outer_scale);
+			}
+			
+			int str_len = s.length();
+			
+			screen.draw(s, rect.x + padding_x, rect.y + padding_y, options_col, 1);
+			
+			i++;
+		}
+	}*/
+
+	public void render(Graphics g, int width, int height)
+	{
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, width, height);
+
+
 	}
 }

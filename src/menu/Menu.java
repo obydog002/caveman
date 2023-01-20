@@ -1,11 +1,11 @@
 package src.menu;
 
-import src.game.Screen;
+import java.awt.Graphics;
 
 public class Menu
 {
 	// draw to screen, with supplied wid
-	public void render(Screen screen)
+	public void render(Graphics g, int width, int height)
 	{
 		
 	}

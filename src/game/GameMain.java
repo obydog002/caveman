@@ -177,13 +177,14 @@ public class GameMain extends Canvas implements Runnable
 				System.out.println(render_ticks + " " + system_ticks + " " + ms_elapsed);
 				render_ticks = 0;
 				system_ticks = 0;
-				fps_time = ms_previous;
+				fps_time = ms_current;
 			}
 
 			while (lag >= MsPerUpdate)
 			{
-				input.tick();
+				//input.tick();
 				tick();
+
 				system_ticks++;
 				lag -= MsPerUpdate;
 			}
@@ -229,23 +230,17 @@ public class GameMain extends Canvas implements Runnable
 				// menu should be drawn
 				if (menu != null)
 				{
-					menu.render(menu_screen);
-					
-					for (int i = 0; i < menu_pixels.length; i++)
-					{
-						menu_pixels[i] = menu_screen.pixels[i];
-					}
-					
-					g.fillRect(0, 0, getWidth(), getHeight());
-					g.drawImage(menu_img, 0, 0, getWidth(), getHeight(), null);
+					menu.render(g, getWidth(), getHeight());
 				}
 				else 
 				{
 					game.render(g, getWidth(), getHeight());
 				}
 				g.dispose();
-			} while (strategy.contentsRestored());
+			} 
+			while (strategy.contentsRestored());
 			strategy.show();
-		} while (strategy.contentsLost());
+		} 
+		while (strategy.contentsLost());
 	}
 }
