@@ -24,7 +24,8 @@ public class Game
 	static int passCol = 0xff4cff67;
 	static int deadCol = 0xffff0f33;
 	
-	int time = 2*Constants.SECOND;
+	private static final int Second = 60;
+	int time = 2*Second;
 	
 	ArrayList<Entity> entities;
 
@@ -136,9 +137,6 @@ public class Game
 		level_height = level.height;
 		word = "level: " + level_name + " go!";
 		
-		// +1 for the item bar at the bottom
-		main.reset_pixels(level.width, level.height + 1);
-		
 		for (int i = 0; i < level.entities.length; i++)
 		{
 			int xx = i % level.width;
@@ -198,7 +196,7 @@ public class Game
 						load_level_from_campagin();
 					
 					state = State.READY;
-					time = 2*Constants.SECOND;
+					time = 2*Second;
 					break;
 					
 			case READY: 
@@ -209,7 +207,7 @@ public class Game
 						state = State.GAMEPLAY;
 						player.dead = false;
 						win = false;
-						time = Constants.SECOND;
+						time = Second;
 					}
 					break;
 
@@ -230,7 +228,7 @@ public class Game
 					
 					if (win)
 					{
-						time = 2*Constants.SECOND;
+						time = 2*Second;
 						
 						wordCol = passCol;
 						word = "passed!";
@@ -264,7 +262,7 @@ public class Game
 						clubs = 0;
 						
 						state = State.DIE;
-						time = 2*Constants.SECOND;
+						time = 2*Second;
 					}
 					break;
 			case WIN:
@@ -273,7 +271,7 @@ public class Game
 						time--;
 					else
 					{
-						time = 2*Constants.SECOND;
+						time = 2*Second;
 						state = State.LOADING_MAP;
 					}
 					break;
@@ -297,7 +295,7 @@ public class Game
 						clubs = 0;
 						
 						state = State.DIE;
-						time = 2*Constants.SECOND;
+						time = 2*Second;
 					}	
 					break;
 		}
@@ -339,18 +337,16 @@ public class Game
 	{
 		g.drawImage(background, 0, 0, width, height, null);
 
-		double ent_stride_width = (double)width/level_width;
-		double ent_stride_height = (double)height/level_height;
+		double ent_stride_width = ((double)width)/level_width;
+		double ent_stride_height = ((double)height)/level_height;
 		for (Entity e : entities)
 		{
-			double xx_left = ent_stride_width * e.getX();
-			double xx_right = ent_stride_width * (e.getX() + 1);
-			double yy_top = ent_stride_height * e.getY();
-			double yy_bot = ent_stride_height * (e.getY() + 1);
-			int ent_x = (int)Math.round(xx_left);
-			int ent_y = (int)Math.round(yy_top);
-			int ent_width = (int)Math.round(xx_right - xx_left);
-			int ent_height = (int)Math.round(yy_bot - yy_top);
+			int ent_x = (int)(ent_stride_width * e.getX());
+			int ent_y = (int)(ent_stride_height * e.getY());
+			int next_x = (int)(ent_stride_width * (e.getX() + 1));
+			int next_y = (int)(ent_stride_height * (e.getY() + 1));
+			int ent_width = next_x - ent_x;
+			int ent_height = next_y - ent_y;
 			g.drawImage(e.getImage(), ent_x, ent_y, ent_width, ent_height, null);
 		}
 	}
@@ -363,7 +359,7 @@ public class Game
 		g.drawImage(Art.club, x_left, y_top, tool_bar_unit_length, tool_bar_unit_length, null);
 		String clubs_str = ":" + this.clubs;
 		Art.item_font.draw_string(g, clubs_str, x_left + tool_bar_unit_length, y_top, tool_bar_unit_length, tool_bar_unit_length);
-		//Art.item_font.draw_string(g, level_name, x_left + clubs_str.length()*tool_bar_unit_length, y_top, tool_bar_unit_length, tool_bar_unit_length);
+		Art.item_font.draw_string_centered(g, level_name, x_left + width/2, y_top, tool_bar_unit_length, tool_bar_unit_length);
 	}
 
 	private final static int ToolBarUnitLength = 30;

@@ -16,11 +16,6 @@ import java.util.Random;
 
 public class GameMain extends Canvas implements Runnable
 {
-	// block number * width/height of block
-	public int width = 51;
-
-	public int height = 27 + 1; // 1 because item screen at the bottom
-	
 	private boolean running;
 	private Thread thread;
 	
@@ -30,15 +25,6 @@ public class GameMain extends Canvas implements Runnable
 	// current menu, could be options, whatever
 	private src.menu.Menu menu;
 	
-	// seperate screen to draw menus
-	private Screen menu_screen;
-	private int[] menu_pixels;
-	
-	private BufferedImage menu_img;
-	
-	private Screen screen;
-	private BufferedImage img;
-	private int[] pixels;
 	private Input input;
 	
 	// used for if input of whole keyboard is needed
@@ -54,14 +40,8 @@ public class GameMain extends Canvas implements Runnable
 		
 		// keyboard input 
 		keyboard_input = new KeyboardInput();
-		
-		menu_screen = new Screen(width, height, Constants.SCALE);
-		menu_img = new BufferedImage(Constants.SCALE* width, Constants.SCALE * height, BufferedImage.TYPE_INT_RGB);
-		menu_pixels = ((DataBufferInt)menu_img.getRaster().getDataBuffer()).getData();
-		
-		menu = new MainMenu(this, input, menu_screen.get_width(), menu_screen.get_height());
-		
-		reset_pixels(width, height);
+
+		set_main_menu();
 		
 		addKeyListener(input);
 		addKeyListener(keyboard_input);	
@@ -86,7 +66,7 @@ public class GameMain extends Canvas implements Runnable
 
 	public void set_main_menu()
 	{
-		menu = new MainMenu(this, input, menu_screen.get_width(), menu_screen.get_height());
+		menu = new MainMenu(this, input, parent.getWidth(), parent.getHeight());
 	}
 
 	// newcampaign menu
@@ -99,17 +79,6 @@ public class GameMain extends Canvas implements Runnable
 	public void set_editor()
 	{
 		
-	}
-	
-	public void reset_pixels(int width, int height)
-	{
-		this.width = width;
-		this.height = height;
-		
-		screen = new Screen(width, height, Constants.SCALE);
-		
-		img = new BufferedImage(Constants.SCALE* width, Constants.SCALE * height, BufferedImage.TYPE_INT_RGB);
-		pixels = ((DataBufferInt)img.getRaster().getDataBuffer()).getData();
 	}
 	
 	public synchronized void start()
@@ -165,6 +134,7 @@ public class GameMain extends Canvas implements Runnable
 
 		createBufferStrategy(2);
 		strategy = getBufferStrategy();
+
 		while (running)
 		{
 			double ms_current = ms_get_current_time();
@@ -182,7 +152,7 @@ public class GameMain extends Canvas implements Runnable
 
 			while (lag >= MsPerUpdate)
 			{
-				//input.tick();
+				input.tick();
 				tick();
 
 				system_ticks++;
@@ -193,12 +163,13 @@ public class GameMain extends Canvas implements Runnable
 			render_ticks++;
 			try
 			{
-			Thread.sleep(2);
+				Thread.sleep(2);
 			}
 			catch (Exception e)
 			{
 				
 			}
+
 			if (should_exit)
 			{
 				exit();

@@ -97,4 +97,11 @@ public class Font
 			x += letter_width;
 		}
 	}
+
+	// draw the text centered around x.
+	// This only does x centering.
+	public void draw_string_centered(Graphics g, String line, int x, int y, int letter_width, int letter_height)
+	{
+		draw_string(g, line, x - line.length()*letter_width/2, y, letter_width, letter_height);
+	}
 }

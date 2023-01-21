@@ -4,8 +4,9 @@ import src.file.FileManager;
 import src.file.CampaignSave;
 
 import src.game.GameMain;
-import src.game.Constants;
 import src.game.Input;
+import src.game.Art;
+import src.game.Draw;
 
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ import java.awt.Graphics;
 public class MainMenu extends Menu
 {
 	String header = "caveman";
-	String all_options[] = {"new campaign", "continue campaign", "quit"};
+	private static final String AllOptions[] = {"new campaign", "continue campaign", "quit"};
 
 	// length of options
 	int options_len = 0;
@@ -27,6 +28,10 @@ public class MainMenu extends Menu
 	// Input reference
 	private Input input;
 	
+	int border_width = 1;
+	int border_height = 1;
+	int button_scale = 32;
+
 	// arraylist of options and their bounding boxes
 	ArrayList<String> options;
 	ArrayList<Rectangle> options_bounding_boxes;
@@ -36,14 +41,7 @@ public class MainMenu extends Menu
 	
 	// we include the continue campaign button if there is already an existing file
 	private boolean existing_campaign;
-	
-	// get the biggest string for box stuff
-	private int option_max_length = 0;
-	
-	// padding for boxes
-	private int padding_x = 5;
-	private int padding_y = 5;
-	
+
 	public MainMenu(GameMain main, Input input, int width, int height)
 	{	
 		this.main = main;
@@ -55,31 +53,28 @@ public class MainMenu extends Menu
 		this.options = new ArrayList<>();
 		this.options_bounding_boxes = new ArrayList<>();
 		
-		for (int i = 0; i < all_options.length; i++)
+		for (int i = 0; i < AllOptions.length; i++)
 		{
 			if (i != 1 || existing_campaign)
-				options.add(all_options[i]);
+				options.add(AllOptions[i]);
 		}
 		
+		int options_max_length = 0;
 		for (String s : options)
 		{
 			int length = s.length();
-			if (length > option_max_length)
-				option_max_length = length;
+			if (length > options_max_length)
+				options_max_length = length;
 		}
 		
-		int i = 0;
-		
-		for (String s : options)
+		for (int i = 0; i < options.size();  i++)
 		{
-			int xx = width/2 - (int)(0.5*option_max_length * Constants.SCALE) - padding_x;
-			int yy = ((4+i)*height)/16 - padding_y;
-			int r_width = option_max_length*Constants.SCALE + 2*padding_x;
-			int r_height = Constants.SCALE + 2*padding_y;
+			int xx = width/2 - options_max_length * button_scale/2;
+			int yy = ((4+i)*height)/16;
+			int r_width = options_max_length*button_scale;
+			int r_height = button_scale;
 			
 			options_bounding_boxes.add(new Rectangle(xx, yy, r_width, r_height));
-			
-			i++;
 		}
 		
 		options_len = options.size();
@@ -135,51 +130,27 @@ public class MainMenu extends Menu
 		}
 	}
 
-	/*public void render(Screen screen)
-	{	
-		// clear screen to black
-		screen.clear(0);
-		
-		int width = screen.get_width();
-		int height = screen.get_height();
-		
-		int header_scale = 4;
-		int header_col = 0xFFE4864B;
-		
-		screen.draw(header, width/2 - (int)(0.5*header.length()*Constants.SCALE*header_scale), height/16, header_col, header_scale);
-		
-		int box_inner_col = 0xFFBCBCBC;
-		int box_outer_col = 0xFF919191;
-		int box_outer_scale = 6;
+	public void render(Graphics g, int width, int height)
+	{
+		Draw.fill_rect(g, 0, 0, width, height, Color.BLACK);
 
-		int options_col = 0xFFE85353;
-		int i = 0;
-		for (String s : options)
+		Art.title_font.draw_string_centered(g, header, width/2, height/16, 32*4, 32*4);
+
+		for (int i = 0; i < options.size(); i++)
 		{
+			String opt = options.get(i);
 			Rectangle rect = options_bounding_boxes.get(i);
-			
+
 			if (selection == i)
 			{
-				screen.draw_box(rect.x, rect.y, rect.width, rect.height, screen.darken(box_inner_col, 0.5), screen.darken(box_outer_col, 0.5), box_outer_scale);
+				Draw.fill_bordered_rect(g, rect.x, rect.y, rect.width, rect.height, 1, 1, SelectedBoxOutsideCol, SelectedBoxInnerCol);
 			}
 			else
 			{
-				screen.draw_box(rect.x, rect.y, rect.width, rect.height, box_inner_col, box_outer_col, box_outer_scale);
+				Draw.fill_bordered_rect(g, rect.x, rect.y, rect.width, rect.height, 1, 1, BoxOutsideCol, BoxInnerCol);
 			}
-			
-			int str_len = s.length();
-			
-			screen.draw(s, rect.x + padding_x, rect.y + padding_y, options_col, 1);
-			
-			i++;
+
+			Art.option_font.draw_string_centered(g, opt, rect.x + rect.width/2, rect.y, 32, 32);
 		}
-	}*/
-
-	public void render(Graphics g, int width, int height)
-	{
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, width, height);
-
-
 	}
 }

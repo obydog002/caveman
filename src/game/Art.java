@@ -37,6 +37,7 @@ public class Art
 	public static BufferedImage toolBar = loadImage(BACKGROUND_PATH, "toolbar.png");
 	
 	public static Font title_font = new Font(loadImage(RES_PATH, "alphabet.png"), 0xFFE4864B, 0xFFB86239);
+	public static Font option_font = new Font(loadImage(RES_PATH, "alphabet.png"), 0xFFE85353, 0xFF742828);
 	public static Font item_font  = new Font(loadImage(RES_PATH, "alphabet.png"), 0xff444444, 0xff333333);
 	
 	public final static int IgnoreCol = (0x00FF00FF << 8);

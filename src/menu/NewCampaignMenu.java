@@ -6,8 +6,6 @@ import src.file.CampaignSave;
 
 import src.game.KeyboardInput;
 import src.game.GameMain;
-import src.game.Screen;
-import src.game.Constants;
 
 public class NewCampaignMenu extends Menu
 {
@@ -22,10 +20,6 @@ public class NewCampaignMenu extends Menu
 	// 1: choose campaign (if applicable)
 	// 2: pass control back to GameMain for running game
 	private int state = 0;
-	
-	// padding for boxes
-	private int padding_x = 5;
-	private int padding_y = 5;
 	
 	// input from the user
 	String name;
@@ -242,5 +236,7 @@ public class NewCampaignMenu extends Menu
 	{
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, width, height);
+
+		
 	}
 }
