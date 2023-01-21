@@ -6,6 +6,8 @@ import src.file.CampaignSave;
 
 import src.game.KeyboardInput;
 import src.game.GameMain;
+import src.game.Art;
+import src.game.Draw;
 
 public class NewCampaignMenu extends Menu
 {
@@ -237,6 +239,20 @@ public class NewCampaignMenu extends Menu
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, width, height);
 
-		
+		// name selection
+		if (state == 0)
+		{
+			Art.title_font.draw_string_centered(g, header, width/2, height/16, 32*2, 32*2);
+			String h2 = "type name max length 32 characters";
+			Art.item_font.draw_string_centered(g, h2, width/2, 3*height/16, 32, 32);
+			int max_chars = 32;
+			int enter_box_width = max_chars * 32;
+			int enter_box_height = 32;
+			Color box_inner_col = new Color(0xbc, 0xbc, 0xbc);
+			Color box_outer_col = new Color(0x91, 0x91, 0x91);
+			int xx = width/2 - enter_box_width/2;
+			int yy = 4*height/16;
+			Draw.fill_bordered_rect(g, xx, yy, enter_box_width, enter_box_height, 1, 1, box_outer_col, box_inner_col);
+		}
 	}
 }
