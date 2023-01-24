@@ -358,8 +358,8 @@ public class Game
 		int tool_bar_unit_length = height;
 		g.drawImage(Art.club, x_left, y_top, tool_bar_unit_length, tool_bar_unit_length, null);
 		String clubs_str = ":" + this.clubs;
-		Art.item_font.draw_string(g, clubs_str, x_left + tool_bar_unit_length, y_top, tool_bar_unit_length, tool_bar_unit_length);
-		Art.item_font.draw_string_centered(g, level_name, x_left + width/2, y_top, tool_bar_unit_length, tool_bar_unit_length);
+		Art.font.draw_string(g, clubs_str, x_left + tool_bar_unit_length, y_top, tool_bar_unit_length, tool_bar_unit_length, Style.ui_item_font_color_pair);
+		Art.font.draw_string_centered(g, level_name, x_left + width/2, y_top, tool_bar_unit_length, tool_bar_unit_length, Style.ui_item_font_color_pair);
 	}
 
 	private final static int ToolBarUnitLength = 30;

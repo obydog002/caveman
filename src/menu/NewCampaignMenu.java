@@ -8,6 +8,7 @@ import src.game.KeyboardInput;
 import src.game.GameMain;
 import src.game.Art;
 import src.game.Draw;
+import src.game.Style;
 
 public class NewCampaignMenu extends Menu
 {
@@ -242,9 +243,9 @@ public class NewCampaignMenu extends Menu
 		// name selection
 		if (state == 0)
 		{
-			Art.title_font.draw_string_centered(g, header, width/2, height/16, 32*2, 32*2);
+			Art.font.draw_string_centered(g, header, width/2, height/16, 32*2, 32*2, Style.ui_title_font_color_pair);
 			String h2 = "type name max length 32 characters";
-			Art.item_font.draw_string_centered(g, h2, width/2, 3*height/16, 32, 32);
+			Art.font.draw_string_centered(g, h2, width/2, 3*height/16, 32, 32, Style.ui_item_font_color_pair);
 			int max_chars = 32;
 			int enter_box_width = max_chars * 32;
 			int enter_box_height = 32;
@@ -252,7 +253,8 @@ public class NewCampaignMenu extends Menu
 			Color box_outer_col = new Color(0x91, 0x91, 0x91);
 			int xx = width/2 - enter_box_width/2;
 			int yy = 4*height/16;
-			Draw.fill_bordered_rect(g, xx, yy, enter_box_width, enter_box_height, 1, 1, box_outer_col, box_inner_col);
+			Draw.fill_bordered_rect(g, xx, yy, enter_box_width, enter_box_height, 6, 6, box_outer_col, box_inner_col, true);
+			//Art.
 		}
 	}
 }

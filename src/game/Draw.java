@@ -11,9 +11,18 @@ public class Draw
         g.fillRect(x, y, width, height);
     }
 
-    public static void fill_bordered_rect(Graphics g, int x, int y, int width, int height, int border_width, int border_height, Color outside, Color inner)
+    // normalize - make the top-left corner the start of the inner box, not the outer box
+    public static void fill_bordered_rect(Graphics g, int x, int y, int width, int height, int border_width, int border_height, Color outside, Color inner, boolean normalize)
     {
-        fill_rect(g, x, y, width, height, outside);
-        fill_rect(g, x + border_width, y + border_height, width - 2*border_width, height - 2*border_height, inner);
+        if (normalize)
+        {
+            fill_rect(g, x - border_width, y - border_height, width + 2*border_width, height + 2*border_height, outside);
+            fill_rect(g, x, y, width, height, inner);
+        }
+        else
+        {
+            fill_rect(g, x, y, width, height, outside);
+            fill_rect(g, x + border_width, y + border_height, width - 2*border_width, height - 2*border_height, inner);
+        }
     }
 }
