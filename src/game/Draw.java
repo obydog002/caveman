@@ -25,4 +25,11 @@ public class Draw
             fill_rect(g, x + border_width, y + border_height, width - 2*border_width, height - 2*border_height, inner);
         }
     }
+
+	private final static Color DarkenColor = new Color(0.0f, 0.0f, 0.0f, .3f);
+    // darken a rectangle of space on the screen
+    public static void darken(Graphics g, int x, int y, int width, int height)
+    {
+        fill_rect(g, x, y, width, height, DarkenColor);
+    }
 }

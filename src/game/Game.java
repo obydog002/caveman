@@ -358,16 +358,39 @@ public class Game
 		int tool_bar_unit_length = height;
 		g.drawImage(Art.club, x_left, y_top, tool_bar_unit_length, tool_bar_unit_length, null);
 		String clubs_str = ":" + this.clubs;
-		Art.font.draw_string(g, clubs_str, x_left + tool_bar_unit_length, y_top, tool_bar_unit_length, tool_bar_unit_length, Style.ui_item_font_color_pair);
-		Art.font.draw_string_centered(g, level_name, x_left + width/2, y_top, tool_bar_unit_length, tool_bar_unit_length, Style.ui_item_font_color_pair);
+		Art.font.draw_string(g, clubs_str, x_left + tool_bar_unit_length, y_top, tool_bar_unit_length, tool_bar_unit_length, Style.item_color_pair);
+		Art.font.draw_string_centered(g, level_name, x_left + width/2, y_top + tool_bar_unit_length/2, tool_bar_unit_length, tool_bar_unit_length, Style.neutral_color_pair);
 	}
 
-	private final static int ToolBarUnitLength = 30;
 	public void render(Graphics g, int width, int height)
 	{
 		int tool_bar_unit_length = width/32;
 		int game_height = height - tool_bar_unit_length;
 		render_game(g, width, game_height);
 		render_toolbar(g, 0, game_height, width, tool_bar_unit_length);
+
+		if (state != State.GAMEPLAY)
+		{
+			Draw.darken(g, 0, 0, width, height);
+		}
+
+		if (state == State.READY)
+		{
+			Art.font.draw_string_centered(g, "ready!", width/2, game_height/2, tool_bar_unit_length, tool_bar_unit_length, Style.win_color_pair);
+		}
+		else if (state == State.DIE)
+		{
+			Art.font.draw_string_centered(g, "oops! you died!", width/2, game_height/2, tool_bar_unit_length, tool_bar_unit_length, Style.lose_color_pair);
+		}
+		else if (state == State.WIN)
+		{
+			Art.font.draw_string_centered(g, "yay! you won!", width/2, game_height/2, tool_bar_unit_length, tool_bar_unit_length, Style.win_color_pair);
+		}
+		else if (state == State.PAUSE)
+		{
+			Art.font.draw_string_centered(g, "press q to quit", width/2, game_height/2 - tool_bar_unit_length, tool_bar_unit_length, tool_bar_unit_length, Style.neutral_color_pair);
+			Art.font.draw_string_centered(g, "r to restart level or", width/2, game_height/2, tool_bar_unit_length, tool_bar_unit_length, Style.neutral_color_pair);
+			Art.font.draw_string_centered(g, "p to resume game", width/2, game_height/2 + tool_bar_unit_length, tool_bar_unit_length, tool_bar_unit_length, Style.neutral_color_pair);
+		}
 	}
 }

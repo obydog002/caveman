@@ -243,9 +243,9 @@ public class NewCampaignMenu extends Menu
 		// name selection
 		if (state == 0)
 		{
-			Art.font.draw_string_centered(g, header, width/2, height/16, 32*2, 32*2, Style.ui_title_font_color_pair);
+			Art.font.draw_string_centered(g, header, width/2, height/16 + 32, 32*2, 32*2, Style.title_color_pair);
 			String h2 = "type name max length 32 characters";
-			Art.font.draw_string_centered(g, h2, width/2, 3*height/16, 32, 32, Style.ui_item_font_color_pair);
+			Art.font.draw_string_centered(g, h2, width/2, 3*height/16 + 32/2, 32, 32, Style.option_color_pair);
 			int max_chars = 32;
 			int enter_box_width = max_chars * 32;
 			int enter_box_height = 32;
@@ -253,8 +253,32 @@ public class NewCampaignMenu extends Menu
 			Color box_outer_col = new Color(0x91, 0x91, 0x91);
 			int xx = width/2 - enter_box_width/2;
 			int yy = 4*height/16;
+			// box for input
 			Draw.fill_bordered_rect(g, xx, yy, enter_box_width, enter_box_height, 6, 6, box_outer_col, box_inner_col, true);
-			//Art.
+			Art.font.draw_string(g, name, xx, yy, 32, 32, Style.neutral_color_pair);
+
+			if (draw_character_line)
+			{
+				xx += name_length*32;
+				Draw.fill_rect(g, xx, yy, 4, enter_box_height, Color.BLACK);
+			}
+
+			h2 = "press enter to continue";
+
+			xx = width/2;
+			
+			yy = 5*height/16 + 32/2;
+			Art.font.draw_string_centered(g, h2, xx, yy, 32, 32, Style.option_color_pair);
+			
+			if (warning_timer > 0)
+			{
+				h2 = "cannot continue with an empty name!";
+				
+				xx = width/2; 
+				
+				yy = 7*height/16 + 32/2;
+				Art.font.draw_string_centered(g, h2, xx, yy, 32, 32, Style.option_color_pair);
+			}
 		}
 	}
 }

@@ -135,7 +135,7 @@ public class MainMenu extends Menu
 	{
 		Draw.fill_rect(g, 0, 0, width, height, Color.BLACK);
 
-		Art.font.draw_string_centered(g, header, width/2, height/16, 32*4, 32*4, Style.ui_title_font_color_pair);
+		Art.font.draw_string_centered(g, header, width/2, height/16 + 2*34, 32*4, 32*4, Style.title_color_pair);
 
 		for (int i = 0; i < options.size(); i++)
 		{
@@ -151,7 +151,7 @@ public class MainMenu extends Menu
 				Draw.fill_bordered_rect(g, rect.x, rect.y, rect.width, rect.height, 2, 2, BoxOutsideCol, BoxInnerCol, true);
 			}
 
-			Art.font.draw_string_centered(g, opt, rect.x + rect.width/2, rect.y, 32, 32, Style.ui_option_font_color_pair);
+			Art.font.draw_string_centered(g, opt, rect.x + rect.width/2, rect.y + rect.height/2, 32, 32, Style.option_color_pair);
 		}
 	}
 }

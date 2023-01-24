@@ -120,11 +120,10 @@ public class Font
 		}
 	}
 
-	// draw the text centered around x.
-	// This only does x centering.
+	// centers the string so (x,y) is positioned at the center of the string.
 	private void draw_string_centered(Graphics g, String line, int x, int y, int letter_width, int letter_height, Color outside_col, Color inside_col)
 	{
-		draw_string(g, line, x - line.length()*letter_width/2, y, letter_width, letter_height, outside_col, inside_col);
+		draw_string(g, line, x - line.length()*letter_width/2, y - letter_height/2, letter_width, letter_height, outside_col, inside_col);
 	}
 
 	// color pair versions
