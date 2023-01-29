@@ -159,7 +159,7 @@ public class NewCampaignMenu extends Menu
 		}
 		else if (state == 2)
 		{
-			main.set_campaign(new CampaignSave(campaign_marker.getBytes(), 5, name));
+			main.set_campaign(new CampaignSave(campaign_marker.getBytes(), 1, name));
 		}
 	}
 
