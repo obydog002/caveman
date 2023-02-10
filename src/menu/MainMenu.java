@@ -15,6 +15,8 @@ import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import java.awt.event.KeyEvent;
+
 public class MainMenu extends Menu
 {
 	String header = "caveman";
@@ -84,17 +86,17 @@ public class MainMenu extends Menu
 	public void tick()
 	{
 		// move selection up the menu
-		if (input.up.press_initial())
+		if (input.key_clicked(KeyEvent.VK_W))
 		{
 			selection = (selection + options_len - 1) % options_len;
 		} // move selection down the menu
-		else if (input.down.press_initial())
+		else if (input.key_clicked(KeyEvent.VK_S))
 		{
 			selection = (selection + 1) % options_len;
 		}
 		
 		// process selection choice
-		if (input.use.press_initial())
+		if (input.key_clicked(KeyEvent.VK_SPACE))
 		{
 			// correct for if there are existing campaigns
 			if (existing_campaign)

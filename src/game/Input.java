@@ -2,129 +2,71 @@ package src.game;
 
 import java.awt.event.*;
 
-import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Input implements KeyListener
 {
-	public class Key 
-	{
-		public int presses, absorbs;
-		public boolean down, clicked;
-
-		private boolean press_initial = true;
-		
-		public int press_inital_count = -1;
-		
-		public Key() 
-		{
-			keys.add(this);
-		}
-
-		public void toggle(boolean pressed) 
-		{
-			if (pressed != down) 
-			{
-				down = pressed;
-			}
-
-			if (pressed) 
-			{
-				presses++;
-				
-				if (press_initial)
-				{
-					press_inital_count = 2;
-					press_initial = false;
-				}
-			}
-			else
-			{
-				press_initial = true;
-			}
-		}
-		
-		public void tick() 
-		{
-			if (press_inital_count > 0)
-				press_inital_count--;
-			
-			if (absorbs < presses) 
-			{
-				absorbs++;
-				clicked = true;
-			} 
-			else 
-				clicked = false;
-		}
-		
-		// if this is the first 'press'
-		public boolean press_initial()
-		{
-			return press_inital_count > 0;
-		}
-	}
+	private final int KeysLength = KeyEvent.CHAR_UNDEFINED + 1; // all possible key strokes
+	// 0 - not held, 1 - held (but not first click), 2 - held and first click
+	private AtomicInteger keys[];
 	
-	public ArrayList<Key> keys = new ArrayList<>();
-	
-	public Key up = new Key();
-	public Key down = new Key();
-	public Key right = new Key();
-	public Key left = new Key();
-	public Key use = new Key();
-	public Key pause = new Key();
-	public Key die = new Key();
-	public Key quit = new Key();
+	private ConcurrentLinkedQueue<KeyEventPair> keys_queue;
 
-	public void releaseAll() 
+	public Input()
 	{
-		for (int i = 0; i < keys.size(); i++) 
+		keys = new AtomicInteger[KeysLength];
+		for (int i = 0; i < KeysLength; i++)
 		{
-			keys.get(i).down = false;
+			keys[i] = new AtomicInteger(0); 
 		}
+		keys_queue = new ConcurrentLinkedQueue<>();
 	}
 
-	public void tick() 
-	{
-		for (int i = 0; i < keys.size(); i++) 
-		{
-			keys.get(i).tick();
-		}
-	}
-	
 	public void keyPressed(KeyEvent ke) 
 	{
-		toggle(ke, true);
+		int val = keys[ke.getKeyCode()].get();
+		if (val == 0)
+		{
+			keys[ke.getKeyCode()].set(2); // a 'click' event
+			keys_queue.add(new KeyEventPair(ke.getKeyCode(), KeyEventPair.KeyEventType.CLICKED));
+		}
+		else 
+		{
+			keys_queue.add(new KeyEventPair(ke.getKeyCode(), KeyEventPair.KeyEventType.PRESSED));
+		}
 	}
 
 	public void keyReleased(KeyEvent ke) 
 	{
-		toggle(ke, false);
+		keys[ke.getKeyCode()].set(0);
+		keys_queue.add(new KeyEventPair(ke.getKeyCode(), KeyEventPair.KeyEventType.RELEASED));
 	}
 	
 	public void keyTyped(KeyEvent ke)
 	{
 		// empty
 	}
-	
-	private void toggle(KeyEvent ke, boolean pressed)
+
+	// returns null if no event
+	public KeyEventPair pop_next_event()
 	{
-		if (ke.getKeyCode() == KeyEvent.VK_W) up.toggle(pressed);
-		if (ke.getKeyCode() == KeyEvent.VK_S) down.toggle(pressed);
-		if (ke.getKeyCode() == KeyEvent.VK_A) left.toggle(pressed);
-		if (ke.getKeyCode() == KeyEvent.VK_D) right.toggle(pressed);
-		
-		if (ke.getKeyCode() == KeyEvent.VK_UP) up.toggle(pressed);
-		if (ke.getKeyCode() == KeyEvent.VK_DOWN) down.toggle(pressed);
-		if (ke.getKeyCode() == KeyEvent.VK_LEFT) left.toggle(pressed);
-		if (ke.getKeyCode() == KeyEvent.VK_RIGHT) right.toggle(pressed);
-		
-		if (ke.getKeyCode() == KeyEvent.VK_SPACE) use.toggle(pressed);
-		if (ke.getKeyCode() == KeyEvent.VK_ENTER) use.toggle(pressed);
-		
-		if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) pause.toggle(pressed);
-		if (ke.getKeyCode() == KeyEvent.VK_P) pause.toggle(pressed);
-		
-		if (ke.getKeyCode() == KeyEvent.VK_R) die.toggle(pressed);
-		if (ke.getKeyCode() == KeyEvent.VK_Q) quit.toggle(pressed);
+		return keys_queue.poll();
 	}
+
+    public boolean key_pressed(int code)
+    {
+        return keys[code].get() != 0;
+    }
+    
+    public boolean key_clicked(int code)
+    {
+        int val = keys[code].get();
+        if (val == 2)
+        {
+            keys[code].decrementAndGet();
+            return true;
+        }
+        return false;
+    }
 }

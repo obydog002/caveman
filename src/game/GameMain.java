@@ -27,24 +27,17 @@ public class GameMain extends Canvas implements Runnable
 	
 	private Input input;
 	
-	// used for if input of whole keyboard is needed
-	private KeyboardInput keyboard_input;
-	
 	public static Random rng;
 	
 	public GameMain(JFrame parent)
 	{	
 		this.parent = parent;
-		// usual input for game play
+
 		input = new Input();
-		
-		// keyboard input 
-		keyboard_input = new KeyboardInput();
 
 		set_main_menu();
 		
 		addKeyListener(input);
-		addKeyListener(keyboard_input);	
 	}
 	
 	// loads the game to use a campaign
@@ -72,7 +65,7 @@ public class GameMain extends Canvas implements Runnable
 	// newcampaign menu
 	public void set_new_campaign_menu()
 	{
-		menu = new NewCampaignMenu(this, keyboard_input);
+		menu = new NewCampaignMenu(this, input);
 	}
 	
 	// sets the editor
@@ -152,7 +145,6 @@ public class GameMain extends Canvas implements Runnable
 
 			while (lag >= MsPerUpdate)
 			{
-				input.tick();
 				tick();
 
 				system_ticks++;

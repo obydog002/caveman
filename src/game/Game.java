@@ -212,7 +212,7 @@ public class Game
 					break;
 
 			case GAMEPLAY: 
-					if (input.pause.press_initial())
+					if (input.key_clicked(KeyEvent.VK_P))
 					{
 						state = State.PAUSE;
 						word = "paused! press esc to unpause, q to quit, r to restart the level";
@@ -276,15 +276,15 @@ public class Game
 					}
 					break;
 			case PAUSE: 
-					if (input.pause.press_initial())
+					if (input.key_clicked(KeyEvent.VK_P))
 					{
 						state = State.GAMEPLAY;
 					}
-					if (input.quit.press_initial())
+					if (input.key_clicked(KeyEvent.VK_Q))
 					{
 						main.set_main_menu();
 					}
-					if (input.die.press_initial())
+					if (input.key_clicked(KeyEvent.VK_R))
 					{
 						player.dead = true;
 						player.move(-1,-1);
