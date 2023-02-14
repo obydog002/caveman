@@ -114,16 +114,46 @@ public class GameMain extends Canvas implements Runnable
 		return System.nanoTime() / OneMillion;
 	}
 
+	// sleeps upto a maximum amount
+	// returns the ms in real time this method consumed.
+	private double sleep(double ms_to_sleep)
+	{
+		final double MsSleepBuffer = 0.5;
+		double prev = ms_get_current_time();
+		double diff = 0;
+		while ((diff = ms_get_current_time() - prev) < ms_to_sleep - MsSleepBuffer)
+		{
+			if (diff < ms_to_sleep - 1 - MsSleepBuffer)
+			{
+				try
+				{
+					Thread.sleep(1);
+				}
+				catch (Exception e)
+				{
+
+				}
+			}
+		}
+		return ms_get_current_time() - prev;
+	}
+
 	private BufferStrategy strategy;
 	public void run()
 	{
+		final double SimFramesPerSecond = 120.0d;
+		final double MsPerSimFrame = 1000.0 / SimFramesPerSecond;
+		double sim_lag = 0;
+		final double RenderFramesPerSecond = 60.0d;
+		final double MsPerRenderFrame = 1000.0 / RenderFramesPerSecond;
+		double render_lag = 0;
+
 		double ms_previous = ms_get_current_time();
-		final double MsPerUpdate = 10.0d;
-		double lag = 0.0;
+
 		double fps_time = ms_previous;
+		double time_slept = 0;
 		int render_ticks = 0;
-		int system_ticks = 0;
-		int counter = 0;
+		int sim_ticks = 0;
 
 		createBufferStrategy(2);
 		strategy = getBufferStrategy();
@@ -132,35 +162,42 @@ public class GameMain extends Canvas implements Runnable
 		{
 			double ms_current = ms_get_current_time();
 			double ms_elapsed = ms_current - ms_previous;
+
 			ms_previous = ms_current;
-			lag += ms_elapsed;
+
+			sim_lag += ms_elapsed;
+			render_lag += ms_elapsed;
 
 			if (fps_time + 1000 < ms_current)
 			{
-				System.out.println(render_ticks + " " + system_ticks + " " + ms_elapsed);
+				double percentage_slept = 100 * time_slept / 1000;
+				System.out.println(render_ticks + " " + sim_ticks + " percentage slept:" + percentage_slept + "%");
+				time_slept = 0;
 				render_ticks = 0;
-				system_ticks = 0;
+				sim_ticks = 0;
 				fps_time = ms_current;
 			}
 
-			while (lag >= MsPerUpdate)
+			while (sim_lag >= MsPerSimFrame)
 			{
 				tick();
+				sim_ticks++;
 
-				system_ticks++;
-				lag -= MsPerUpdate;
+				sim_lag -= MsPerSimFrame;
 			}
 
-			render();
-			render_ticks++;
-			try
+			while (render_lag >= MsPerRenderFrame)
 			{
-				Thread.sleep(2);
+				render();
+				render_ticks++;
+
+				render_lag -= MsPerRenderFrame;
 			}
-			catch (Exception e)
-			{
-				
-			}
+
+			// sleep for a bit to save some cycles
+			// figure out which is coming next - render or sim update?
+			double time_to_sleep_ms = Math.min(MsPerSimFrame - sim_lag, MsPerRenderFrame - render_lag);
+			time_slept += sleep(time_to_sleep_ms);
 
 			if (should_exit)
 			{
