@@ -1,2 +1,3 @@
 *.class
 editor/*.class
+*.swp
