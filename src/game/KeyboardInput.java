@@ -84,11 +84,6 @@ public class KeyboardInput implements KeyListener, AbstractInput
 		// empty
 	}
 
-	public KeyEventPair keyqueue_get_next()
-	{
-		return keys_queue.poll();
-	}
-
     	public boolean key_held(LogicalKey key)
     	{
 		int hack = logToRaw.get(key);
@@ -106,4 +101,14 @@ public class KeyboardInput implements KeyListener, AbstractInput
         	}
         	return false;
     	}
+
+	public KeyEventPair keyqueue_get_next()
+	{
+		return keys_queue.poll();
+	}
+
+	public void keyqueue_reset() 
+	{
+		keys_queue.clear();
+	}
 }

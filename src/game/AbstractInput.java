@@ -6,4 +6,6 @@ public interface AbstractInput {
 	
 	// should return null if queue is empty
 	public KeyEventPair keyqueue_get_next();  
+	// completely clear all entries
+	public void keyqueue_reset();
 }

@@ -80,6 +80,7 @@ public class GameMain extends Canvas implements Runnable
 	// newcampaign menu
 	public void set_new_campaign_menu()
 	{
+		input.keyqueue_reset();
 		menu = new NewCampaignMenu(this, input);
 	}
 	
