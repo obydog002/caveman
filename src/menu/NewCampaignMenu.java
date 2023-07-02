@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 
 import src.file.CampaignSave;
 
-import src.game.Input;
+import src.game.AbstractInput;
 import src.game.GameMain;
 import src.game.Art;
 import src.game.Draw;
@@ -18,7 +18,7 @@ public class NewCampaignMenu extends Menu
 	String header = "your name player?";
 	
 	// reference to input
-	private Input input;
+	private AbstractInput input;
 	
 	private GameMain main;
 	
@@ -42,7 +42,7 @@ public class NewCampaignMenu extends Menu
 	
 	String campaign_marker = "CMG0";
 	
-	public NewCampaignMenu(GameMain main, Input input)
+	public NewCampaignMenu(GameMain main, AbstractInput input)
 	{
 		this.main = main;
 		
@@ -56,11 +56,11 @@ public class NewCampaignMenu extends Menu
 		if (state == 0)
 		{
 			KeyEventPair event;
-			while ((event = input.pop_next_event()) != null)
+			while ((event = input.keyqueue_get_next()) != null)
 			{
 				if (event.type == KeyEventPair.KeyEventType.PRESSED || event.type == KeyEventPair.KeyEventType.CLICKED)
 				{
-					if (event.code == KeyEvent.VK_ENTER)
+					if (event.rawCode == KeyEvent.VK_ENTER)
 					{
 						if (name.length() == 0)
 						{
@@ -71,14 +71,14 @@ public class NewCampaignMenu extends Menu
 							state = 2;
 						}
 					}
-					else if (event.code == KeyEvent.VK_BACK_SPACE)
+					else if (event.rawCode == KeyEvent.VK_BACK_SPACE)
 					{
 						if (name.length() > 0)
 							name = name.substring(0, name.length() - 1);
 					}
 					else if (name.length() < 32) // normal keys
 					{
-						name += (char)event.code;
+						name += (char)event.rawCode;
 
 						warning_timer = 0;
 					}

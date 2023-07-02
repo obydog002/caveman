@@ -9,12 +9,14 @@ public class KeyEventPair
 		CLICKED
 	};
 
-    public int code;
-    public KeyEventType type;
+    	public LogicalKey logicalKey;
+	public int rawCode;
+    	public KeyEventType type;
 
-    public KeyEventPair(int code, KeyEventType type)
-    {
-        this.code = code;
-        this.type = type;
-    }
+    	public KeyEventPair(LogicalKey logicalKey, int rawCode, KeyEventType type)
+    	{
+        	this.logicalKey = logicalKey;
+		this.rawCode = rawCode;
+        	this.type = type;
+    	}
 }

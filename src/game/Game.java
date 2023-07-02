@@ -35,7 +35,7 @@ public class Game
 	Player player;
 	BufferedImage background;
 	
-	Input input;
+	AbstractInput input;
 	GameMain main;
 	
 	int clubs = 0;
@@ -66,7 +66,7 @@ public class Game
 
 	// default constructor
 	// shouldnt be used as it has no level or campaign information
-	public Game(Input input, GameMain main)
+	public Game(AbstractInput input, GameMain main)
 	{
 		this.input = input;
 		this.main = main;
@@ -83,7 +83,7 @@ public class Game
 	
 	// this constructor will initialize the game to run the level supplied,
 	// after finished display score screen
-	public Game(Input input, GameMain main, Level level)
+	public Game(AbstractInput input, GameMain main, Level level)
 	{
 		this(input, main);
 		
@@ -93,7 +93,7 @@ public class Game
 	// this constructor initializes the game to run through a campaign,
 	// made of distinct levels
 	// and will display a end score screen when its over
-	public Game(Input input, GameMain main, CampaignSave campaign)
+	public Game(AbstractInput input, GameMain main, CampaignSave campaign)
 	{
 		this(input, main);
 		
@@ -212,7 +212,7 @@ public class Game
 					break;
 
 			case GAMEPLAY: 
-					if (input.key_clicked(KeyEvent.VK_P))
+					if (input.key_clicked(LogicalKey.PAUSE))
 					{
 						state = State.PAUSE;
 						word = "paused! press esc to unpause, q to quit, r to restart the level";
@@ -276,15 +276,15 @@ public class Game
 					}
 					break;
 			case PAUSE: 
-					if (input.key_clicked(KeyEvent.VK_P))
+					if (input.key_clicked(LogicalKey.PAUSE))
 					{
 						state = State.GAMEPLAY;
 					}
-					if (input.key_clicked(KeyEvent.VK_Q))
+					if (input.key_clicked(LogicalKey.QUIT))
 					{
 						main.set_main_menu();
 					}
-					if (input.key_clicked(KeyEvent.VK_R))
+					if (input.key_clicked(LogicalKey.RESTART))
 					{
 						player.dead = true;
 						player.move(-1,-1);

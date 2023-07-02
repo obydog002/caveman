@@ -19,7 +19,7 @@ public class Player extends Mob
 	
 	public void tick(Game game)
 	{	
-		if (game.input.key_clicked(KeyEvent.VK_SPACE) && game.clubs > 0)
+		if (game.input.key_clicked(LogicalKey.ACTION) && game.clubs > 0)
 		{
 			Entity e[] = checkDirection(game);
 			if (lastdir != -1 && e[lastdir] != null && e[lastdir].breakable())
@@ -29,7 +29,7 @@ public class Player extends Mob
 			}
 		}
 		
-		if (game.input.key_clicked(KeyEvent.VK_R))
+		if (game.input.key_clicked(LogicalKey.RESTART))
 		{
 			dead = true;
 		}
@@ -40,13 +40,13 @@ public class Player extends Mob
 		}
 		else
 		{
-			if (game.input.key_pressed(KeyEvent.VK_A))
+			if (game.input.key_held(LogicalKey.LEFT))
 				direction = 0;
-			else if (game.input.key_pressed(KeyEvent.VK_W))
+			else if (game.input.key_held(LogicalKey.UP))
 				direction = 1;
-			else if (game.input.key_pressed(KeyEvent.VK_D))
+			else if (game.input.key_held(LogicalKey.RIGHT))
 				direction = 2;
-			else if (game.input.key_pressed(KeyEvent.VK_S))
+			else if (game.input.key_held(LogicalKey.DOWN))
 				direction = 3;
 		
 			if (direction > -1)

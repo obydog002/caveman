@@ -4,7 +4,8 @@ import src.file.FileManager;
 import src.file.CampaignSave;
 
 import src.game.GameMain;
-import src.game.Input;
+import src.game.AbstractInput;
+import src.game.LogicalKey;
 import src.game.Art;
 import src.game.Draw;
 import src.game.Style;
@@ -28,8 +29,8 @@ public class MainMenu extends Menu
 	// GameMain reference
 	private GameMain main;
 	
-	// Input reference
-	private Input input;
+	// AbstractInput reference
+	private AbstractInput input;
 	
 	int border_width = 1;
 	int border_height = 1;
@@ -45,7 +46,7 @@ public class MainMenu extends Menu
 	// we include the continue campaign button if there is already an existing file
 	private boolean existing_campaign;
 
-	public MainMenu(GameMain main, Input input, int width, int height)
+	public MainMenu(GameMain main, AbstractInput input, int width, int height)
 	{	
 		this.main = main;
 		
@@ -86,17 +87,17 @@ public class MainMenu extends Menu
 	public void tick()
 	{
 		// move selection up the menu
-		if (input.key_clicked(KeyEvent.VK_W))
+		if (input.key_clicked(LogicalKey.UP))
 		{
 			selection = (selection + options_len - 1) % options_len;
 		} // move selection down the menu
-		else if (input.key_clicked(KeyEvent.VK_S))
+		else if (input.key_clicked(LogicalKey.DOWN))
 		{
 			selection = (selection + 1) % options_len;
 		}
 		
 		// process selection choice
-		if (input.key_clicked(KeyEvent.VK_SPACE))
+		if (input.key_clicked(LogicalKey.ACTION))
 		{
 			// correct for if there are existing campaigns
 			if (existing_campaign)

@@ -9,6 +9,7 @@ import src.menu.*;
 import java.awt.image.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
+import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
@@ -25,7 +26,7 @@ public class GameMain extends Canvas implements Runnable
 	// current menu, could be options, whatever
 	private src.menu.Menu menu;
 	
-	private Input input;
+	private AbstractInput input;
 	
 	public static Random rng;
 	
@@ -33,11 +34,25 @@ public class GameMain extends Canvas implements Runnable
 	{	
 		this.parent = parent;
 
-		input = new Input();
+		LogicalInput logicalConverter = new LogicalInput();
+		logicalConverter.set_pair(KeyEvent.VK_A, LogicalKey.LEFT);	
+		logicalConverter.set_pair(KeyEvent.VK_LEFT, LogicalKey.LEFT);
+		logicalConverter.set_pair(KeyEvent.VK_W, LogicalKey.UP);
+		logicalConverter.set_pair(KeyEvent.VK_UP, LogicalKey.UP);
+		logicalConverter.set_pair(KeyEvent.VK_D, LogicalKey.RIGHT);
+		logicalConverter.set_pair(KeyEvent.VK_RIGHT, LogicalKey.RIGHT);
+		logicalConverter.set_pair(KeyEvent.VK_S, LogicalKey.DOWN);
+		logicalConverter.set_pair(KeyEvent.VK_DOWN, LogicalKey.DOWN);
+		logicalConverter.set_pair(KeyEvent.VK_SPACE, LogicalKey.ACTION);
+		logicalConverter.set_pair(KeyEvent.VK_P, LogicalKey.PAUSE);
+		logicalConverter.set_pair(KeyEvent.VK_R, LogicalKey.RESTART);
+		logicalConverter.set_pair(KeyEvent.VK_Q, LogicalKey.QUIT);
+
+		input = new KeyboardInput(logicalConverter);
 
 		set_main_menu();
 		
-		addKeyListener(input);
+		addKeyListener((KeyboardInput)input);
 	}
 	
 	// loads the game to use a campaign
