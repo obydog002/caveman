@@ -75,7 +75,7 @@ public class Game
 		entities = new ArrayList();
 		garbage = new ArrayList();
 		
-		player = new Player(-1,-1,10,Art.player);
+		player = new Player(-1,-1,30,Art.player,input);
 		exit = new Entity(-10,-10,false,Art.exit);
 		
 		state = State.LOADING_MAP;

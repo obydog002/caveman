@@ -210,7 +210,7 @@ public class GameMain extends Canvas implements Runnable
 				render_lag -= MsPerRenderFrame;
 			}
 
-			// sleep for a bit to save some cycles
+			// sleep to save some cycles
 			// figure out which is coming next - render or sim update?
 			double time_to_sleep_ms = Math.min(MsPerSimFrame - sim_lag, MsPerRenderFrame - render_lag);
 			time_slept += sleep(time_to_sleep_ms);

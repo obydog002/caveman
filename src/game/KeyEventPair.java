@@ -19,4 +19,20 @@ public class KeyEventPair
 		this.rawCode = rawCode;
         	this.type = type;
     	}
+	
+	public boolean is_key(LogicalKey logicalKey) {
+		return this.logicalKey == logicalKey;
+	}
+	
+	public boolean is_held() {
+		return this.type != KeyEventType.RELEASED;
+	}
+
+	public boolean is_clicked() {
+		return this.type == KeyEventType.CLICKED;
+	}
+
+	public boolean is_released() {
+		return this.type == KeyEventType.RELEASED;
+	}
 }
