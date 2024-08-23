@@ -173,6 +173,12 @@ public class GameMain extends Canvas implements Runnable
 
 		createBufferStrategy(2);
 		strategy = getBufferStrategy();
+		{
+			Graphics g = strategy.getDrawGraphics();
+			g.setColor(Color.BLACK);
+			g.fillRect(0, 0, getWidth(), getHeight());
+		}
+		
 
 		while (running)
 		{

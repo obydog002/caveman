@@ -52,13 +52,15 @@ public class Player extends Mob
 		
 		if (time == 0) 
 		{
-			boolean validMoveMade = false;
-			while (!validMoveMade) 
+			boolean finished = false;
+			while (!finished) 
 			{
 				if (movementQueue.size() > 0) 
 				{
-					if (currentPosInMovementQueue == -1 || currentPosInMovementQueue >= movementQueue.size())
+					if (currentPosInMovementQueue == -1 || currentPosInMovementQueue >= movementQueue.size()) {
 						currentPosInMovementQueue = 0;
+						finished = true;
+					}
 	
 					KeyEventPair candidateMove = movementQueue.get(currentPosInMovementQueue);
 					if (candidateMove.is_clicked() || (candidateMove.is_held() && input.key_held(candidateMove.logicalKey)))
@@ -77,7 +79,7 @@ public class Player extends Mob
 						if (tryMove(game, dir[potentialDirection], potentialDirection))
 						{
 							time = timeToMove;
-							validMoveMade = true;
+							finished = true;
 						}
 
 						if (candidateMove.is_clicked()) 
@@ -87,10 +89,12 @@ public class Player extends Mob
 					else
 						movementQueue.remove(currentPosInMovementQueue);
 						
-					
 				}
 				else 
+				{
 					currentPosInMovementQueue = -1;
+					finished = true;
+				}
 			}
 		}
 	}

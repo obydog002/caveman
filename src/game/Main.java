@@ -10,8 +10,7 @@ public class Main
 {
 	static JFrame frame;
 	
-	public static void create_and_show_GUI(String[] args)
-	{
+	public static void create_and_show_game_GUI(String[] args) {	
 		frame = new JFrame("Caveman"); 
 		
 		Dimension pref = Toolkit.getDefaultToolkit().getScreenSize();
@@ -42,7 +41,7 @@ public class Main
 		{
 			public void run()
 			{
-				create_and_show_GUI(args);
+				create_and_show_game_GUI(args);
 			}
 		});
 	}

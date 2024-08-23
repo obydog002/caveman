@@ -21,10 +21,7 @@ import java.awt.event.KeyEvent;
 public class MainMenu extends Menu
 {
 	String header = "caveman";
-	private static final String AllOptions[] = {"new campaign", "continue campaign", "quit"};
-
-	// length of options
-	int options_len = 0;
+	private static final String AllOptions[] = {"New game", "Continue game", "Editor", "Quit"};
 	
 	// GameMain reference
 	private GameMain main;
@@ -80,57 +77,37 @@ public class MainMenu extends Menu
 			
 			options_bounding_boxes.add(new Rectangle(xx, yy, r_width, r_height));
 		}
-		
-		options_len = options.size();
 	}
 	
+	private void process_menu_selection(int selection)
+	{
+		String option = options.get(selection);
+		if (option.equals("New game")) {
+			main.set_new_campaign_menu();
+		} else if (option.equals("Continue game")) {
+			System.out.println("Continue game");
+		} else if (option.equals("Editor")) {
+		} else if (option.equals("Quit")) {
+			main.request_exit();
+		}
+	}
+
 	public void tick()
 	{
 		// move selection up the menu
 		if (input.key_clicked(LogicalKey.UP))
 		{
-			selection = (selection + options_len - 1) % options_len;
+			selection = (selection + options.size() - 1) % options.size();
 		} // move selection down the menu
 		else if (input.key_clicked(LogicalKey.DOWN))
 		{
-			selection = (selection + 1) % options_len;
+			selection = (selection + 1) % options.size();
 		}
 		
 		// process selection choice
 		if (input.key_clicked(LogicalKey.ACTION))
 		{
-			// correct for if there are existing campaigns
-			if (existing_campaign)
-			{
-				if (selection == 1)
-					selection = -2;
-				else
-					selection--;
-			}
-			
-			if (selection == -2) // existing campaign continue
-			{
-				System.out.println("existing campaign");
-			}
-			else if (selection == 0) // new campaign
-			{
-				main.set_new_campaign_menu();
-				
-				/*byte[] campaign_marker = new byte[4];
-				campaign_marker[0] = (byte)'C';
-				campaign_marker[1] = (byte)'M';
-				campaign_marker[2] = (byte)'G';
-				campaign_marker[3] = (byte)'1';
-				
-				int level = 3;
-				String name = "cptrock69";
-				
-				FileManager.write_campaign_save_file(FileManager.RES_PATH + "/saves/", "test.SAV", campaign_marker, level, name);*/
-			}
-			else if (selection == 1) // quit
-			{
-				main.request_exit();
-			}
+			process_menu_selection(selection);
 		}
 	}
 
