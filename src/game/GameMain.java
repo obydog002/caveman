@@ -15,6 +15,8 @@ import javax.swing.*;
 
 import java.util.Random;
 
+import java.util.function.Function;
+
 public class GameMain extends Canvas implements Runnable
 {
 	private boolean running;
@@ -30,27 +32,27 @@ public class GameMain extends Canvas implements Runnable
 	
 	public static Random rng;
 	
+	private Function exit_action;
+
 	public GameMain(JFrame parent)
 	{	
 		this.parent = parent;
 
 		LogicalInput logicalConverter = new LogicalInput();
-		logicalConverter.set_pair(KeyEvent.VK_A, LogicalKey.LEFT);	
-		logicalConverter.set_pair(KeyEvent.VK_LEFT, LogicalKey.LEFT);
-		logicalConverter.set_pair(KeyEvent.VK_W, LogicalKey.UP);
-		logicalConverter.set_pair(KeyEvent.VK_UP, LogicalKey.UP);
-		logicalConverter.set_pair(KeyEvent.VK_D, LogicalKey.RIGHT);
-		logicalConverter.set_pair(KeyEvent.VK_RIGHT, LogicalKey.RIGHT);
-		logicalConverter.set_pair(KeyEvent.VK_S, LogicalKey.DOWN);
-		logicalConverter.set_pair(KeyEvent.VK_DOWN, LogicalKey.DOWN);
-		logicalConverter.set_pair(KeyEvent.VK_SPACE, LogicalKey.ACTION);
-		logicalConverter.set_pair(KeyEvent.VK_P, LogicalKey.PAUSE);
-		logicalConverter.set_pair(KeyEvent.VK_R, LogicalKey.RESTART);
-		logicalConverter.set_pair(KeyEvent.VK_Q, LogicalKey.QUIT);
+		logicalConverter.set_pair(KeyEvent.VK_A, 		LogicalKey.LEFT);	
+		logicalConverter.set_pair(KeyEvent.VK_LEFT, 	LogicalKey.LEFT);
+		logicalConverter.set_pair(KeyEvent.VK_W, 		LogicalKey.UP);
+		logicalConverter.set_pair(KeyEvent.VK_UP, 		LogicalKey.UP);
+		logicalConverter.set_pair(KeyEvent.VK_D, 		LogicalKey.RIGHT);
+		logicalConverter.set_pair(KeyEvent.VK_RIGHT, 	LogicalKey.RIGHT);
+		logicalConverter.set_pair(KeyEvent.VK_S, 		LogicalKey.DOWN);
+		logicalConverter.set_pair(KeyEvent.VK_DOWN, 	LogicalKey.DOWN);
+		logicalConverter.set_pair(KeyEvent.VK_SPACE, 	LogicalKey.ACTION);
+		logicalConverter.set_pair(KeyEvent.VK_P, 		LogicalKey.PAUSE);
+		logicalConverter.set_pair(KeyEvent.VK_R, 		LogicalKey.RESTART);
+		logicalConverter.set_pair(KeyEvent.VK_Q, 		LogicalKey.QUIT);
 
 		input = new KeyboardInput(logicalConverter);
-
-		set_main_menu();
 		
 		addKeyListener((KeyboardInput)input);
 	}
@@ -59,6 +61,14 @@ public class GameMain extends Canvas implements Runnable
 	public void set_campaign(CampaignSave campaign)
 	{
 		game = new Game(input, this, campaign);
+		/*game.set_exit_action(
+			new Function<Object, Object>() {
+				@Override
+				public Object apply(Object o) {
+					set_main_menu();
+					return o;
+				}
+			});*/
 		menu = null;
 	}
 	
@@ -67,6 +77,13 @@ public class GameMain extends Canvas implements Runnable
 	public void set_game_level(Level level)
 	{
 		game = new Game(input, this, level);
+		/*game.set_exit_action(
+			new Function<Object, Object>() {
+				@Override
+				public Object apply(Object o) {
+					return o;
+				}
+			});*/
 		menu = null;
 	}
 	
@@ -115,13 +132,20 @@ public class GameMain extends Canvas implements Runnable
 	public synchronized void exit()
 	{
 		running = false;
-		parent.dispatchEvent(new WindowEvent(parent, WindowEvent.WINDOW_CLOSING));
+		if (exit_action != null) {
+			exit_action.apply(null);
+		}
 	}
 
 	private boolean should_exit = false;
  	public void request_exit()
 	{
 		should_exit = true;
+	}
+
+	public void set_exit_action(Function exit_action) 
+	{
+		this.exit_action = exit_action;
 	}
 
 	public final double OneMillion = 1000000.0d;

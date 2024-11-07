@@ -61,8 +61,8 @@ public class Game
 	
 	public static Random rng = new Random();
 	
-	int level_width = 20;
-	int level_height = 20;
+	int level_width = 32;
+	int level_height = 24;
 
 	// default constructor
 	// shouldnt be used as it has no level or campaign information
@@ -70,7 +70,7 @@ public class Game
 	{
 		this.input = input;
 		this.main = main;
-		
+
 		background = Art.rockBackground;
 		entities = new ArrayList();
 		garbage = new ArrayList();
@@ -282,7 +282,7 @@ public class Game
 					}
 					if (input.key_clicked(LogicalKey.QUIT))
 					{
-						main.set_main_menu();
+						main.request_exit();
 					}
 					if (input.key_clicked(LogicalKey.RESTART))
 					{

@@ -100,7 +100,7 @@ public class MainPanel extends JPanel implements MouseMotionListener, MouseListe
 		
 		entity_choice = 0;
 		
-		init_template_level(30, 20, "base");
+		init_template_level(32, 24, "base");
 		set_prev();
 		
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();

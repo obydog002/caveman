@@ -1,12 +1,15 @@
 package src.editor;
 
 import src.file.*;
+import src.game.GameMain;
 
 import java.io.File;
 
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+
+import java.util.function.Function;
 
 public class EditorMain extends JPanel implements ActionListener
 {
@@ -16,30 +19,53 @@ public class EditorMain extends JPanel implements ActionListener
 	
 	public final static String PATH = EditorMain.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 	
-	public EditorMain()
-	{
-		super(new BorderLayout());
-		
+	private GameMain runningGame = null;
+	private JFrame parentFrame;
+	private ToolBar editor_bar;
+
+	public void create_components() {
 		Dimension pref = Toolkit.getDefaultToolkit().getScreenSize();
 		
 		double width = 3*pref.getWidth()/4;
 		double height = 3*pref.getHeight()/4;
 		
-		setSize(new Dimension((int)width, (int)height));
-		
-		MainPanel panel = new MainPanel();
-		ToolBar editor_bar = new ToolBar(panel);
-		
-		fc = new JFileChooser(PATH + "/res/maps/user");
-		
-		this.panel = panel;
+		Dimension dim = new Dimension((int)width, (int)height);
+		setSize(dim);
+		parentFrame.setSize(dim);
+		parentFrame.setPreferredSize(dim);
+		this.editor_bar = new ToolBar(panel);
+		this.panel = new MainPanel();
 		
 		add(editor_bar, BorderLayout.LINE_START);
 		add(panel, BorderLayout.CENTER);
+
+		parentFrame.setJMenuBar(create_menu(this));
+		
+		parentFrame.add(this);
+		
+		parentFrame.pack();
+		parentFrame.setLocationRelativeTo(null);
+		parentFrame.setVisible(true);
+	}
+
+	public void destroy_components() {
+		remove(panel);
+		remove(editor_bar);
+		parentFrame.getContentPane().removeAll();
+		parentFrame.repaint();
+	}
+
+	public EditorMain(JFrame parentFrame)
+	{
+		super(new BorderLayout());
+		fc = new JFileChooser(PATH + "/res/maps/user");
+		this.parentFrame = parentFrame;
+		
+		create_components();
 	}
 	
 	
-	public static void create_menu(EditorMain editor, JFrame frame)
+	public static JMenuBar create_menu(EditorMain editor)
 	{
 		JMenuBar menuBar = new JMenuBar();
 		
@@ -90,8 +116,14 @@ public class EditorMain extends JPanel implements ActionListener
 		options_submenu.add(change_level_dims_item);
 		
 		file.add(options_submenu);
+
+		JMenuItem play_level = new JMenuItem("Play Level");
+		play_level.getAccessibleContext().setAccessibleDescription("Play the current level");
+		play_level.setActionCommand("play_level");
+		play_level.addActionListener(editor);
+		file.add(play_level);
 		
-		frame.setJMenuBar(menuBar);
+		return menuBar;
 	}
 	
 	public static void create_and_show_GUI(String[] args)
@@ -100,14 +132,27 @@ public class EditorMain extends JPanel implements ActionListener
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		EditorMain editor = new EditorMain();
-		create_menu(editor, frame);
-		
-		frame.add(editor);
-		
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
+		new EditorMain(frame);
+	}
+
+	public void play_game() {
+		destroy_components();
+		runningGame = new GameMain(parentFrame);
+		parentFrame.add(runningGame);
+		parentFrame.pack();
+		runningGame.set_game_level(panel.get_level());
+		runningGame.set_exit_action(
+			new Function<Object, Object>() {
+				@Override
+				public Object apply(Object o) {
+					parentFrame.remove(runningGame);
+					create_components();
+					parentFrame.repaint();
+					return o;
+				}
+			});
+		runningGame.start();
+		parentFrame.repaint();
 	}
 	
 	public void actionPerformed(ActionEvent e)
@@ -124,11 +169,11 @@ public class EditorMain extends JPanel implements ActionListener
 			dialog_panel.add(name_field);
 			
 			dialog_panel.add(new JLabel("width:"));
-			JTextField width_field = new JTextField("30");
+			JTextField width_field = new JTextField("32");
 			dialog_panel.add(width_field);
 			
 			dialog_panel.add(new JLabel("height:"));
-			JTextField height_field = new JTextField("20");
+			JTextField height_field = new JTextField("24");
 			dialog_panel.add(height_field);
 			
 			int res = JOptionPane.showConfirmDialog(null, dialog_panel, "New level", JOptionPane.OK_CANCEL_OPTION);
@@ -418,6 +463,9 @@ public class EditorMain extends JPanel implements ActionListener
 					}
 				}
 			}
+		} 
+		else if (act == "play_level") {
+			this.play_game();
 		}
 	}
 

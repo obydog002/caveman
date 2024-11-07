@@ -24,6 +24,7 @@ public class Main
 		frame.setPreferredSize(dim);
 		
 		GameMain main = new GameMain(frame);
+		main.set_main_menu();
 		
 		frame.add(main);
 		frame.pack();
