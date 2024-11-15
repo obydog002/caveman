@@ -140,18 +140,7 @@ public class EditorMain extends JPanel implements ActionListener
 		runningGame = new GameMain(parentFrame);
 		parentFrame.add(runningGame);
 		parentFrame.pack();
-		runningGame.set_game_level(panel.get_level());
-		runningGame.set_exit_action(
-			new Function<Object, Object>() {
-				@Override
-				public Object apply(Object o) {
-					parentFrame.remove(runningGame);
-					create_components();
-					parentFrame.repaint();
-					return o;
-				}
-			});
-		runningGame.start();
+		
 		parentFrame.repaint();
 	}
 	

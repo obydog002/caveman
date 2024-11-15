@@ -1,3 +1,5 @@
 *.class
 editor/*.class
 *.swp
+*.swo
+*.DS_Store

@@ -83,13 +83,20 @@ public class MainMenu extends Menu
 	{
 		String option = options.get(selection);
 		if (option.equals("New game")) {
-			main.set_new_campaign_menu();
+			NewCampaignMenu menu = new NewCampaignMenu(main, input);
+			main.add_process(menu);
 		} else if (option.equals("Continue game")) {
 			System.out.println("Continue game");
 		} else if (option.equals("Editor")) {
+			
 		} else if (option.equals("Quit")) {
-			main.request_exit();
+			shouldDoFullExit = true;
 		}
+	}
+
+	private boolean shouldDoFullExit = false;
+	public boolean requestFullExit() {
+		return shouldDoFullExit;
 	}
 
 	public void tick()

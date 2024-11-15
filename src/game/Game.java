@@ -11,12 +11,12 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics;
 
-public class Game
+public class Game extends Control
 {
 	// game states
 	enum State
 	{
-		LOADING_MAP, READY, GAMEPLAY, PAUSE, WIN, DIE
+		WAITING, READY, GAMEPLAY, PAUSE, WIN, DIE,
 	}
 	State state;
 	
@@ -78,53 +78,7 @@ public class Game
 		player = new Player(-1,-1,15,Art.player,input);
 		exit = new Entity(-10,-10,false,Art.exit);
 		
-		state = State.LOADING_MAP;
-	}
-	
-	// this constructor will initialize the game to run the level supplied,
-	// after finished display score screen
-	public Game(AbstractInput input, GameMain main, Level level)
-	{
-		this(input, main);
-		
-		load_level(level);
-	}
-	
-	// this constructor initializes the game to run through a campaign,
-	// made of distinct levels
-	// and will display a end score screen when its over
-	public Game(AbstractInput input, GameMain main, CampaignSave campaign)
-	{
-		this(input, main);
-		
-		this.campaign = campaign;
-		
-		set_campaign();
-	}
-	
-	// sets the campaign info to go
-	public void set_campaign()
-	{
-		marker = new String(campaign.marker);
-		
-		max_level = FileManager.get_campaign_max_level(FileManager.RES_PATH + "maps/campaign/", marker);
-		
-		// if its -1 it could not be read properly. 
-		// so just throw a run time error to crash
-		if (max_level == -1)
-			throw new RuntimeException("Could not read campaign file!");
-	}
-	
-	// loads the next level from the campaign
-	// will return 0 if it loads right,
-	// -1 if there is any other errors
-	public int load_level_from_campagin()
-	{
-		Level level = FileManager.read_cv_level(FileManager.RES_PATH + "maps/campaign/" + marker + "/", "lev" + campaign.level + ".CVL");
-		
-		load_level(level);
-		
-		return 0;
+		state = State.WAITING;
 	}
 	
 	public void load_level(Level level)
@@ -186,19 +140,16 @@ public class Game
 		}
 	}
 	
+	public void setReady() {
+		this.state = state.READY;
+	}
+	
 	public void tick()
 	{
 		switch (state)
 		{
-			case LOADING_MAP: 
-					// if we are running a campaign
-					if (campaign != null)
-						load_level_from_campagin();
-					
-					state = State.READY;
-					time = 2*Second;
+			case WAITING: 
 					break;
-					
 			case READY: 
 					if (time > 0)
 						time--;
@@ -272,7 +223,7 @@ public class Game
 					else
 					{
 						time = 2*Second;
-						state = State.LOADING_MAP;
+						state = State.READY;
 					}
 					break;
 			case PAUSE: 

@@ -6,6 +6,8 @@ import javax.swing.SwingUtilities;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import src.menu.MainMenu;
+
 public class Main
 {
 	static JFrame frame;
@@ -18,13 +20,16 @@ public class Main
 		double sc_width = pref.getWidth();
 		double sc_height = pref.getHeight();
 		
-		Dimension dim = new Dimension((int)sc_width, (int)sc_height);
+		int width = (int)sc_width;
+		int height = (int)sc_height;
+		Dimension dim = new Dimension(width, height);
 		
 		frame.setSize(dim);
 		frame.setPreferredSize(dim);
 		
 		GameMain main = new GameMain(frame);
-		main.set_main_menu();
+		MainMenu menu = new MainMenu(main, main.getInput(), width, height);
+		main.add_process(menu);
 		
 		frame.add(main);
 		frame.pack();

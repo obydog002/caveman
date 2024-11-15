@@ -10,34 +10,38 @@ import java.awt.image.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 import javax.swing.*;
 
 import java.util.Random;
 
 import java.util.function.Function;
+import java.util.LinkedList;
 
-public class GameMain extends Canvas implements Runnable
+public class GameMain extends Canvas implements Runnable, MouseMotionListener, MouseListener
 {
 	private boolean running;
 	private Thread thread;
 	
 	private JFrame parent;
-	private Game game = null;
-	
-	// current menu, could be options, whatever
-	private src.menu.Menu menu;
 	
 	private AbstractInput input;
 	
+	public AbstractInput getInput() {
+		return input;
+	}
+
 	public static Random rng;
 	
 	private Function exit_action;
+	private LinkedList<Control> processes;
 
 	public GameMain(JFrame parent)
 	{	
 		this.parent = parent;
-
+		this.processes = new LinkedList<>();
+		
 		LogicalInput logicalConverter = new LogicalInput();
 		logicalConverter.set_pair(KeyEvent.VK_A, 		LogicalKey.LEFT);	
 		logicalConverter.set_pair(KeyEvent.VK_LEFT, 	LogicalKey.LEFT);
@@ -55,41 +59,12 @@ public class GameMain extends Canvas implements Runnable
 		input = new KeyboardInput(logicalConverter);
 		
 		addKeyListener((KeyboardInput)input);
+		addMouseListener(this);
+		addMouseMotionListener(this);
 	}
 	
-	// loads the game to use a campaign
-	public void set_campaign(CampaignSave campaign)
-	{
-		game = new Game(input, this, campaign);
-		/*game.set_exit_action(
-			new Function<Object, Object>() {
-				@Override
-				public Object apply(Object o) {
-					set_main_menu();
-					return o;
-				}
-			});*/
-		menu = null;
-	}
-	
-	// loads the game to play a single level,
-	// for instance from custom levels
-	public void set_game_level(Level level)
-	{
-		game = new Game(input, this, level);
-		/*game.set_exit_action(
-			new Function<Object, Object>() {
-				@Override
-				public Object apply(Object o) {
-					return o;
-				}
-			});*/
-		menu = null;
-	}
-	
-	// changing menu functions
 
-	public void set_main_menu()
+	/*public void set_main_menu()
 	{
 		menu = new MainMenu(this, input, parent.getWidth(), parent.getHeight());
 	}
@@ -99,13 +74,8 @@ public class GameMain extends Canvas implements Runnable
 	{
 		input.keyqueue_reset();
 		menu = new NewCampaignMenu(this, input);
-	}
+	}*/
 	
-	// sets the editor
-	public void set_editor()
-	{
-		
-	}
 	
 	public synchronized void start()
 	{
@@ -178,6 +148,7 @@ public class GameMain extends Canvas implements Runnable
 		return ms_get_current_time() - prev;
 	}
 
+	private boolean exitImmediately = false;
 	private BufferStrategy strategy;
 	public void run()
 	{
@@ -245,23 +216,29 @@ public class GameMain extends Canvas implements Runnable
 			double time_to_sleep_ms = Math.min(MsPerSimFrame - sim_lag, MsPerRenderFrame - render_lag);
 			time_slept += sleep(time_to_sleep_ms);
 
-			if (should_exit)
+			if (processes.size() == 0 || exitImmediately)
 			{
 				exit();
 			}
 		}
 	}
 	
+	public void add_process(Control c) {
+		processes.push(c);
+	}
+
 	public void tick()
 	{
-		// do menu tick if there is a current menu
-		if (menu != null)
-		{
-			menu.tick();
+		if (processes.size() > 0) {
+			if (processes.peek().requestExit()) {
+				processes.pop();
+			} else if (processes.peek().requestFullExit()) {
+				exitImmediately = true;
+			}
 		}
-		else
-		{
-			game.tick();
+
+		if (processes.size() > 0) {
+			processes.peek().tick();
 		}
 	}
 
@@ -274,13 +251,8 @@ public class GameMain extends Canvas implements Runnable
 				Graphics g = strategy.getDrawGraphics();
 				
 				// menu should be drawn
-				if (menu != null)
-				{
-					menu.render(g, getWidth(), getHeight());
-				}
-				else 
-				{
-					game.render(g, getWidth(), getHeight());
+				if (processes.size() > 0) {
+					processes.peek().render(g, getWidth(), getHeight());
 				}
 				g.dispose();
 			} 
@@ -288,5 +260,42 @@ public class GameMain extends Canvas implements Runnable
 			strategy.show();
 		} 
 		while (strategy.contentsLost());
+	}
+
+	// mouse motion listener methods
+	public void mouseDragged(MouseEvent e)
+	{
+		
+	}
+	
+	public void mouseMoved(MouseEvent e)
+	{
+		
+	}
+	
+	// mouse listener methods
+	public void mouseClicked(MouseEvent e)
+	{
+
+	}
+	
+	public void mouseEntered(MouseEvent e)
+	{
+		
+	}
+	
+	public void mouseExited(MouseEvent e)
+	{
+		
+	}
+	
+	public void mousePressed(MouseEvent e)
+	{
+
+	}
+	
+	public void mouseReleased(MouseEvent e)
+	{
+	
 	}
 }

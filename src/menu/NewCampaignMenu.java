@@ -6,6 +6,9 @@ import java.awt.event.KeyEvent;
 
 import src.file.CampaignSave;
 
+import src.game.Game;
+import src.game.Campaign;
+import src.game.CampaignController;
 import src.game.AbstractInput;
 import src.game.GameMain;
 import src.game.Art;
@@ -98,7 +101,14 @@ public class NewCampaignMenu extends Menu
 		}
 		else 
 		{
-			main.set_campaign(new CampaignSave(campaign_marker.getBytes(), 1, name));
+			Game game = new Game(input, main);
+			Campaign campaign = new Campaign();
+			campaign.directory = "CMG0";
+			campaign.campaignName = "Campaign1";
+			campaign.currentLevel = 1;
+			campaign.maxLevel = 10;
+			CampaignController campaignController = new CampaignController(main, game, campaign);
+			main.add_process(campaignController);
 		}
 	}
 
