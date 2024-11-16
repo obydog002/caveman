@@ -41,7 +41,7 @@ public class GameMain extends Canvas implements Runnable, MouseMotionListener, M
 	{	
 		this.parent = parent;
 		this.processes = new LinkedList<>();
-		
+
 		LogicalInput logicalConverter = new LogicalInput();
 		logicalConverter.set_pair(KeyEvent.VK_A, 		LogicalKey.LEFT);	
 		logicalConverter.set_pair(KeyEvent.VK_LEFT, 	LogicalKey.LEFT);
@@ -243,23 +243,13 @@ public class GameMain extends Canvas implements Runnable, MouseMotionListener, M
 	}
 
 	public void render()
-	{
-		do
-		{
-			do
-			{
-				Graphics g = strategy.getDrawGraphics();
-				
-				// menu should be drawn
-				if (processes.size() > 0) {
-					processes.peek().render(g, getWidth(), getHeight());
-				}
-				g.dispose();
-			} 
-			while (strategy.contentsRestored());
+	{		
+		if (processes.size() > 0) {
+			Graphics g = strategy.getDrawGraphics();
+			processes.peek().render(g, getWidth(), getHeight());
+			g.dispose();
 			strategy.show();
-		} 
-		while (strategy.contentsLost());
+		}
 	}
 
 	// mouse motion listener methods
