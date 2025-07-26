@@ -1,23 +1,29 @@
 package src.game;
 
-import src.file.Level;
+import java.io.File;
+
 import src.file.FileManager;
+import src.file.Level;
 
 public class CampaignController extends Control {
-	private GameMain main;
+	private CavemanMain main;
+	private AbstractInput input;
     private Game game;
 	private Campaign campaign;
-    public CampaignController(GameMain main, Game game, Campaign campaign) {
+    public CampaignController(CavemanMain main, AbstractInput input, Campaign campaign) {
 		this.main = main;
-        this.game = game;
+		this.input = input;
 		this.campaign = campaign;
     }
 
 	private void loadLevelIntoGame()
 	{
-		Level level = FileManager.read_cv_level(FileManager.RES_PATH + "maps/campaign/" +
-					  campaign.directory + "/", "lev" + campaign.currentLevel + ".CVL");
-		game.load_level(level);
+		File cavemanLevelFile = new File(
+			FileManager.RES_PATH + "maps/campaign/" +
+					  campaign.directory + "/", "lev" + campaign.currentLevel + ".caveman");
+		Level level = FileManager.readCVLevel(cavemanLevelFile);
+		
+		game = new Game(input, main, level);
 	}
 
     public void tick() {

@@ -1,7 +1,7 @@
-package src.editor;
+package src.oldeditor;
 
 import src.file.*;
-import src.game.GameMain;
+import src.game.CavemanMain;
 
 import java.io.File;
 
@@ -19,7 +19,7 @@ public class EditorMain extends JPanel implements ActionListener
 	
 	public final static String PATH = EditorMain.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 	
-	private GameMain runningGame = null;
+	private CavemanMain runningGame = null;
 	private JFrame parentFrame;
 	private ToolBar editor_bar;
 
@@ -137,7 +137,7 @@ public class EditorMain extends JPanel implements ActionListener
 
 	public void play_game() {
 		destroy_components();
-		runningGame = new GameMain(parentFrame);
+		runningGame = new CavemanMain(parentFrame);
 		parentFrame.add(runningGame);
 		parentFrame.pack();
 		

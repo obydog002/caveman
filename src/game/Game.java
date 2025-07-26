@@ -1,14 +1,10 @@
 package src.game;
 
+import src.file.Level;
+
 import java.util.Random;
 
-import src.file.FileManager;
-import src.file.Level;
-import src.file.CampaignSave;
-
 import java.util.ArrayList;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.awt.Graphics;
 
 public class Game extends Control
@@ -24,19 +20,15 @@ public class Game extends Control
 	static int passCol = 0xff4cff67;
 	static int deadCol = 0xffff0f33;
 	
-	private static final int Second = 60;
-	int time = 2*Second;
-	
-	ArrayList<Entity> entities;
+	int time = 2*GameConstants.SimFramesPerSecond;
 
 	ArrayList<Entity> garbage;
 	
 	Entity exit;
 	Player player;
-	BufferedImage background;
 	
 	AbstractInput input;
-	GameMain main;
+	CavemanMain main;
 	
 	int clubs = 0;
 	
@@ -47,101 +39,34 @@ public class Game extends Control
 	
 	// score 
 	int score = 0;
-	
-	// current level_name
-	public String level_name = "";
-	
-	// campaign may be null, if it is 
-	// we are just running 1 level.
-	private CampaignSave campaign;
-	// some relevant variables for the campaign stuff
-	// unused in the case there is just a level
-	private int max_level = -1;
-	private String marker;
-	
+
 	public static Random rng = new Random();
 	
-	int level_width = 32;
-	int level_height = 24;
+	GameLevel gameLevel;
 
-	// default constructor
-	// shouldnt be used as it has no level or campaign information
-	public Game(AbstractInput input, GameMain main)
+	private boolean requestExit = false;
+	public boolean requestExit() {
+		return requestExit;
+	}
+
+	public Game(AbstractInput input, CavemanMain main, Level level)
 	{
 		this.input = input;
 		this.main = main;
 
-		background = Art.rockBackground;
-		entities = new ArrayList();
-		garbage = new ArrayList();
+		garbage = new ArrayList<Entity>();
 		
-		player = new Player(-1,-1,15,Art.player,input);
+		player = new Player(-1,-1,GameConstants.PlayerTicksPerMovement,Art.player,input);
 		exit = new Entity(-10,-10,false,Art.exit);
-		
+		this.gameLevel = new GameLevel(level, player, exit);
+
 		state = State.WAITING;
+		word = "level: " + gameLevel.name + " go!";
 	}
-	
-	public void load_level(Level level)
-	{
-		entities.clear();
-		
-		level_name = level.name;
-		
-		level_width = level.width;
-		level_height = level.height;
-		word = "level: " + level_name + " go!";
-		
-		for (int i = 0; i < level.entities.length; i++)
-		{
-			int xx = i % level.width;
-			int yy = i / level.width;
-			
-			switch (level.entities[i])
-			{
-				case 1: entities.add(new Entity(xx, yy, false, Art.rock));
-						break; // unbreakable wall1
-				case 2: entities.add(new Entity(xx, yy, false, Art.rock2));
-						break; // unbreakable wall2
-				case 3: entities.add(new MovableWall(xx,yy,false,new boolean[] {false,false,false,false},Art.boulder));
-						break; // boulder
-				case 4: entities.add(new MovableWall(xx,yy,false,new boolean[] {true,false,false,false},Art.boulderl));
-						break; // boulder left
-				case 5: entities.add(new MovableWall(xx,yy,false,new boolean[] {false,true,false,false},Art.boulderu));
-						break; // boulder up
-				case 6: entities.add(new MovableWall(xx,yy,false,new boolean[] {false,false,true,false},Art.boulderr));
-						break; // boulder right
-				case 7: entities.add(new MovableWall(xx,yy,false,new boolean[] {false,false,false,true},Art.boulderd));
-						break; // boulder down
-				case 8: entities.add(new MovableWall(xx,yy,false,new boolean[] {true,false,true,false},Art.boulderlr));
-						break; // boulder left-right
-				case 9: entities.add(new MovableWall(xx,yy,false,new boolean[] {false,true,false,true},Art.boulderud));
-						break; // boulder up-down
-				case 10:entities.add(new MovableWall(xx,yy,false,new boolean[] {true,true,true,true},Art.boulderlurd));
-						break; // boulder all
-				case 11:player.move(xx,yy);
-						entities.add(player);
-						break; // player spawn
-				case 12:exit.move(xx,yy);
-						entities.add(exit);
-						break; // exit 
-				case 13:Entity club = new Entity(xx,yy,false,Art.club);
-						club.setPass();
-						club.setPush();
-						club.id = 100;
-						entities.add(club);
-						break; // club
-				case 14:entities.add(new Mob(xx,yy,45,false,false,false,Art.green));
-						break; // green mammoth
-				case 15:entities.add(new Mob(xx,yy,45,false,true,false,Art.yellow));
-						break; // yellow mammoth
-				case 16:entities.add(new Mob(xx,yy,45,true,true,true,Art.red));
-						break; // red mammoth
-			}
-		}
-	}
+
 	
 	public void setReady() {
-		this.state = state.READY;
+		this.state = State.READY;
 	}
 	
 	public void tick()
@@ -158,7 +83,7 @@ public class Game extends Control
 						state = State.GAMEPLAY;
 						player.dead = false;
 						win = false;
-						time = Second;
+						time = GameConstants.SimFramesPerSecond;
 					}
 					break;
 
@@ -179,27 +104,12 @@ public class Game extends Control
 					
 					if (win)
 					{
-						time = 2*Second;
+						time = 2*GameConstants.SimFramesPerSecond;
 						
 						wordCol = passCol;
 						word = "passed!";
 						
-						if (campaign != null)
-						{
-							// campaign is over
-							if (campaign.level == max_level)
-							{
-								campaign.level = 1;	
-							}
-							else
-							{
-								campaign.level++;
-							}
-						}
-						else
-						{
-							//need to give score screen and return
-						}
+						// TODO - convey we won upstairs somehow
 						
 						state = State.WIN;
 					}
@@ -213,7 +123,7 @@ public class Game extends Control
 						clubs = 0;
 						
 						state = State.DIE;
-						time = 2*Second;
+						time = 2*GameConstants.SimFramesPerSecond;
 					}
 					break;
 			case WIN:
@@ -222,7 +132,7 @@ public class Game extends Control
 						time--;
 					else
 					{
-						time = 2*Second;
+						time = 2*GameConstants.SimFramesPerSecond;
 						state = State.READY;
 					}
 					break;
@@ -233,7 +143,7 @@ public class Game extends Control
 					}
 					if (input.key_clicked(LogicalKey.QUIT))
 					{
-						main.request_exit();
+						requestExit = true;
 					}
 					if (input.key_clicked(LogicalKey.RESTART))
 					{
@@ -246,7 +156,7 @@ public class Game extends Control
 						clubs = 0;
 						
 						state = State.DIE;
-						time = 2*Second;
+						time = 2*GameConstants.SimFramesPerSecond;
 					}	
 					break;
 		}
@@ -255,14 +165,14 @@ public class Game extends Control
 	// tick for the game
 	public void gameTick()
 	{
-		for (Entity e : entities)
+		for (Entity e : gameLevel.entities)
 		{
 			e.tick(this);
 		}
 		
 		int playerX = player.getX();
 		int playerY = player.getY();
-		for (Entity e : entities)
+		for (Entity e : gameLevel.entities)
 		{		
 			if (e.getX() == playerX && e.getY() == playerY)
 			{
@@ -280,46 +190,28 @@ public class Game extends Control
 			}
 		}
 		
-		entities.removeAll(garbage);
+		gameLevel.entities.removeAll(garbage);
 		garbage.clear();
-	}
-
-	private void render_game(Graphics g, int width, int height)
-	{
-		g.drawImage(background, 0, 0, width, height, null);
-
-		double ent_stride_width = ((double)width)/level_width;
-		double ent_stride_height = ((double)height)/level_height;
-		for (Entity e : entities)
-		{
-			int ent_x = (int)(ent_stride_width * e.getX());
-			int ent_y = (int)(ent_stride_height * e.getY());
-			int next_x = (int)(ent_stride_width * (e.getX() + 1));
-			int next_y = (int)(ent_stride_height * (e.getY() + 1));
-			int ent_width = next_x - ent_x;
-			int ent_height = next_y - ent_y;
-			g.drawImage(e.getImage(), ent_x, ent_y, ent_width, ent_height, null);
-		}
 	}
 
 	private void render_toolbar(Graphics g, int x_left, int y_top, int width, int height)
 	{
 		g.drawImage(Art.toolBar, x_left, y_top, width, height, null);
 
-		int tool_bar_unit_length = height;
-		g.drawImage(Art.club, x_left, y_top, tool_bar_unit_length, tool_bar_unit_length, null);
+		g.drawImage(Art.club, x_left, y_top, height, height, null);
 		String clubs_str = ":" + this.clubs;
-		Art.font.draw_string(g, clubs_str, x_left + tool_bar_unit_length, y_top, tool_bar_unit_length, tool_bar_unit_length, Style.item_color_pair);
-		Art.font.draw_string_centered(g, level_name, x_left + width/2, y_top + tool_bar_unit_length/2, tool_bar_unit_length, tool_bar_unit_length, Style.neutral_color_pair);
+		Art.font.draw_string(g, clubs_str, x_left + height, y_top, height, height, Style.item_color_pair);
+		Art.font.draw_string_centered(g, gameLevel.name, x_left + width/2, y_top + height/2, height, height, Style.neutral_color_pair);
 	}
 
 	public void render(Graphics g, int width, int height)
 	{
-		int tool_bar_unit_length = width/32;
-		int game_height = height - tool_bar_unit_length;
-		render_game(g, width, game_height);
-		render_toolbar(g, 0, game_height, width, tool_bar_unit_length);
+		int game_height = height - GameConstants.ToolBarHeight;
+		g.clearRect(0, 0, width, height);
+		gameLevel.render(g, 0, 0, width, game_height);
+		render_toolbar(g, 0, game_height, width, GameConstants.ToolBarHeight);
 
+		int letter_size = GameConstants.ToolBarHeight;
 		if (state != State.GAMEPLAY)
 		{
 			Draw.darken(g, 0, 0, width, height);
@@ -327,21 +219,21 @@ public class Game extends Control
 
 		if (state == State.READY)
 		{
-			Art.font.draw_string_centered(g, "ready!", width/2, game_height/2, tool_bar_unit_length, tool_bar_unit_length, Style.win_color_pair);
+			Art.font.draw_string_centered(g, "ready!", width/2, game_height/2, letter_size, letter_size, Style.win_color_pair);
 		}
 		else if (state == State.DIE)
 		{
-			Art.font.draw_string_centered(g, "oops! you died!", width/2, game_height/2, tool_bar_unit_length, tool_bar_unit_length, Style.lose_color_pair);
+			Art.font.draw_string_centered(g, "oops! you died!", width/2, game_height/2, letter_size, letter_size, Style.lose_color_pair);
 		}
 		else if (state == State.WIN)
 		{
-			Art.font.draw_string_centered(g, "yay! you won!", width/2, game_height/2, tool_bar_unit_length, tool_bar_unit_length, Style.win_color_pair);
+			Art.font.draw_string_centered(g, "yay! you won!", width/2, game_height/2, letter_size, letter_size, Style.win_color_pair);
 		}
 		else if (state == State.PAUSE)
 		{
-			Art.font.draw_string_centered(g, "press q to quit", width/2, game_height/2 - tool_bar_unit_length, tool_bar_unit_length, tool_bar_unit_length, Style.neutral_color_pair);
-			Art.font.draw_string_centered(g, "r to restart level or", width/2, game_height/2, tool_bar_unit_length, tool_bar_unit_length, Style.neutral_color_pair);
-			Art.font.draw_string_centered(g, "p to resume game", width/2, game_height/2 + tool_bar_unit_length, tool_bar_unit_length, tool_bar_unit_length, Style.neutral_color_pair);
+			Art.font.draw_string_centered(g, "press q to quit", width/2, game_height/2 - letter_size, letter_size, letter_size, Style.neutral_color_pair);
+			Art.font.draw_string_centered(g, "r to restart level or", width/2, game_height/2, letter_size, letter_size, Style.neutral_color_pair);
+			Art.font.draw_string_centered(g, "p to resume game", width/2, game_height/2 + letter_size, letter_size, letter_size, Style.neutral_color_pair);
 		}
 	}
 }

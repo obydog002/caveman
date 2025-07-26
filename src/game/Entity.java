@@ -63,7 +63,7 @@ public class Entity
 			ok[i] = null;
 		int x = this.getX();
 		int y = this.getY();
-		for (Entity e : game.entities)
+		for (Entity e : game.gameLevel.entities)
 		{
 			if (e == this) continue;
 			Entity l = (e.getX() == x - 1 && e.getY() == y) ? e : null;

@@ -1,9 +1,10 @@
-package src.editor;
-
-import src.file.Level;
+package src.oldeditor;
 
 import java.awt.*;
 import javax.swing.*;
+
+import src.file.Level;
+
 import java.awt.image.*;
 
 import javax.imageio.ImageIO;

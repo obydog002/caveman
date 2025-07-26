@@ -1,9 +1,10 @@
 package src.menu;
 
 import src.file.FileManager;
+import src.editor.Editor;
 import src.file.CampaignSave;
 
-import src.game.GameMain;
+import src.game.CavemanMain;
 import src.game.AbstractInput;
 import src.game.LogicalKey;
 import src.game.Art;
@@ -23,8 +24,8 @@ public class MainMenu extends Menu
 	String header = "caveman";
 	private static final String AllOptions[] = {"New game", "Continue game", "Editor", "Quit"};
 	
-	// GameMain reference
-	private GameMain main;
+	// CavemanMain reference
+	private CavemanMain main;
 	
 	// AbstractInput reference
 	private AbstractInput input;
@@ -43,7 +44,7 @@ public class MainMenu extends Menu
 	// we include the continue campaign button if there is already an existing file
 	private boolean existing_campaign;
 
-	public MainMenu(GameMain main, AbstractInput input, int width, int height)
+	public MainMenu(CavemanMain main, AbstractInput input, int width, int height)
 	{	
 		this.main = main;
 		
@@ -88,7 +89,8 @@ public class MainMenu extends Menu
 		} else if (option.equals("Continue game")) {
 			System.out.println("Continue game");
 		} else if (option.equals("Editor")) {
-			
+			Editor editor = new Editor(input, main);
+			main.add_process(editor);
 		} else if (option.equals("Quit")) {
 			shouldDoFullExit = true;
 		}

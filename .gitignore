@@ -3,3 +3,4 @@ editor/*.class
 *.swp
 *.swo
 *.DS_Store
+out/

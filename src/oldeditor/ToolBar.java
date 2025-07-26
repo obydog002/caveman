@@ -1,4 +1,4 @@
-package src.editor;
+package src.oldeditor;
 
 import java.awt.*;
 import javax.swing.*;

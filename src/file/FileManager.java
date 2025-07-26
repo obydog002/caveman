@@ -1,15 +1,13 @@
 package src.file;
 
 import java.io.*;
-
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
+import java.util.Optional;
 
 // a class to manage file types used for caveman
 public class FileManager
 {
 	// path to res folder
-	public static final String RES_PATH = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "/res/";
+	public static final String RES_PATH = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "../res/";
 	
 	// caveman level header
 	//public static final byte[] CVL_HEADER = ("\221" + "CVL\r\n" + "\032" + "\n").getBytes();
@@ -47,6 +45,65 @@ public class FileManager
 		}
 	}
 	
+	public static void writeCVLevel(File file, Level level) {
+		try {
+			FileOutputStream fs = new FileOutputStream(file);
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fs));
+
+			writer.write("name:" + level.name + "\n");
+			writer.write("width:" + level.width + "\n");
+			writer.write("height:" + level.height + "\n");
+			writer.write("entities:");
+			for (int e : level.entities) {
+				writer.write(e + ",");
+			}
+			writer.close();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static Level readCVLevel(File file) {
+		try {
+			FileInputStream fin = new FileInputStream(file);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(fin));
+			String line = null;
+
+			String name = "";
+			Optional<Integer> width = Optional.empty();
+			Optional<Integer> height = Optional.empty();
+			String rawEntities[] = null;
+
+			while ((line = reader.readLine()) != null) {
+				String parts[] = line.split(":");
+				switch (parts[0].trim()) {
+					case "name":
+						name = parts[1].trim();
+						break;
+					case "width":
+						width = Optional.of(Integer.parseInt(parts[1].trim()));
+					case "height":
+						height = Optional.of(Integer.parseInt(parts[1].trim()));
+					case "entities":
+						rawEntities = parts[1].trim().split(",");
+					default:
+						break;
+				}
+			}
+
+			int length = width.orElseThrow() * height.orElseThrow();
+			int entities[] = new int[length];
+			for (int i = 0; i < rawEntities.length; i++) {
+				entities[i] = Integer.parseInt(rawEntities[i]);
+			}
+
+			reader.close();
+			return new Level(length, length, entities, name);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static Level read_cv_level(File file)
 	{
 		try

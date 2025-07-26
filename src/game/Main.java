@@ -27,7 +27,7 @@ public class Main
 		frame.setSize(dim);
 		frame.setPreferredSize(dim);
 		
-		GameMain main = new GameMain(frame);
+		CavemanMain main = new CavemanMain(frame);
 		MainMenu menu = new MainMenu(main, main.getInput(), width, height);
 		main.add_process(menu);
 		

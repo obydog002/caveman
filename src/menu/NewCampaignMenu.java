@@ -4,13 +4,10 @@ import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 
-import src.file.CampaignSave;
-
-import src.game.Game;
 import src.game.Campaign;
 import src.game.CampaignController;
 import src.game.AbstractInput;
-import src.game.GameMain;
+import src.game.CavemanMain;
 import src.game.Art;
 import src.game.Draw;
 import src.game.Style;
@@ -23,11 +20,11 @@ public class NewCampaignMenu extends Menu
 	// reference to input
 	private AbstractInput input;
 	
-	private GameMain main;
+	private CavemanMain main;
 	
 	// 0: enter name screen
 	// 1: choose campaign (if applicable)
-	// 2: pass control back to GameMain for running game
+	// 2: pass control back to CavemanMain for running game
 	private int state = 0;
 	
 	// input from the user
@@ -45,11 +42,12 @@ public class NewCampaignMenu extends Menu
 	
 	String campaign_marker = "CMG0";
 	
-	public NewCampaignMenu(GameMain main, AbstractInput input)
+	public NewCampaignMenu(CavemanMain main, AbstractInput input)
 	{
 		this.main = main;
 		
 		this.input = input;
+		input.keyqueue_reset();
 		
 		this.name = "";
 	}
@@ -101,13 +99,12 @@ public class NewCampaignMenu extends Menu
 		}
 		else 
 		{
-			Game game = new Game(input, main);
 			Campaign campaign = new Campaign();
 			campaign.directory = "CMG0";
 			campaign.campaignName = "Campaign1";
 			campaign.currentLevel = 1;
 			campaign.maxLevel = 10;
-			CampaignController campaignController = new CampaignController(main, game, campaign);
+			CampaignController campaignController = new CampaignController(main, input, campaign);
 			main.add_process(campaignController);
 		}
 	}
