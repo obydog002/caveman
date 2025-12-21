@@ -3,7 +3,7 @@ package src.game;
 import src.file.FileManager;
 
 import java.io.File;
-
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
@@ -40,6 +40,8 @@ public class Art
 
 	public final static int IgnoreCol = (0x00FF00FF << 8);
 	public final static int IgnoreCol2 = (0x00FFFF00 << 8);
+
+	public final static Color SelectionColor = new Color(0x00F4B0B1);
 	public static void write_image_transparency(BufferedImage img)
 	{
 		int width = img.getWidth();

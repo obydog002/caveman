@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class KeyboardInput implements KeyListener, AbstractInput
 {
-	private final int LogicalKeysLength = 8 + 1; // all possible key strokes - TODO FIX
+	private final int LogicalKeysLength = 10 + 1; // all possible key strokes - TODO FIX
 	// 0 - not held, 1 - held (but not first click), 2 - held and first click
 	private AtomicInteger keys[];
 	private ConcurrentLinkedQueue<KeyEventPair> keys_queue;
@@ -16,15 +16,12 @@ public class KeyboardInput implements KeyListener, AbstractInput
 	// convert keyboard strokes to logical keys
 	private LogicalInput logicalConverter;
 
-	// TODO - fix this. This is a dirty, dirty hack!!
 	private HashMap<LogicalKey, Integer> logToRaw;
-	private HashMap<Integer, LogicalKey> rawToLog;
 
 	public KeyboardInput(LogicalInput logicalConverter)
 	{
 		// TODO - use somethin gbetter moron
 		logToRaw = new HashMap<>();
-		rawToLog = new HashMap<>();
 		logToRaw.put(LogicalKey.LEFT, 0);
 		logToRaw.put(LogicalKey.UP, 1);
 		logToRaw.put(LogicalKey.RIGHT, 2);
@@ -33,17 +30,9 @@ public class KeyboardInput implements KeyListener, AbstractInput
 		logToRaw.put(LogicalKey.PAUSE, 5);
 		logToRaw.put(LogicalKey.RESTART, 6);
 		logToRaw.put(LogicalKey.QUIT, 7);
-		logToRaw.put(LogicalKey.NOOP, 8);
-
-		rawToLog.put(0, LogicalKey.LEFT);
-		rawToLog.put(1, LogicalKey.UP);
-		rawToLog.put(2, LogicalKey.RIGHT);
-		rawToLog.put(3, LogicalKey.DOWN);
-		rawToLog.put(4, LogicalKey.ACTION);
-		rawToLog.put(5, LogicalKey.PAUSE);
-		rawToLog.put(6, LogicalKey.RESTART);
-		rawToLog.put(7, LogicalKey.QUIT);
-		rawToLog.put(8, LogicalKey.NOOP);
+		logToRaw.put(LogicalKey.LEFT2, 8);
+		logToRaw.put(LogicalKey.RIGHT2, 9);
+		logToRaw.put(LogicalKey.NOOP, 10);
 
 		keys = new AtomicInteger[LogicalKeysLength];
 		for (int i = 0; i < LogicalKeysLength; i++)

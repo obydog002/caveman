@@ -1,10 +1,5 @@
 package src.game;
 
-import src.file.FileManager;
-import src.file.CampaignSave;
-
-import src.menu.*;
-
 import java.awt.image.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
@@ -54,6 +49,8 @@ public class CavemanMain extends Canvas implements Runnable, MouseMotionListener
 		logicalConverter.set_pair(KeyEvent.VK_P, 		LogicalKey.PAUSE);
 		logicalConverter.set_pair(KeyEvent.VK_R, 		LogicalKey.RESTART);
 		logicalConverter.set_pair(KeyEvent.VK_Q, 		LogicalKey.QUIT);
+		logicalConverter.set_pair(KeyEvent.VK_Q, LogicalKey.LEFT2);
+		logicalConverter.set_pair(KeyEvent.VK_E, LogicalKey.RIGHT2);
 
 		input = new KeyboardInput(logicalConverter);
 		
@@ -234,37 +231,51 @@ public class CavemanMain extends Canvas implements Runnable, MouseMotionListener
 	// mouse motion listener methods
 	public void mouseDragged(MouseEvent e)
 	{
-		
+		if (processes.size() > 0) {
+			processes.peek().mouseDragged(e);
+		}
 	}
 	
 	public void mouseMoved(MouseEvent e)
 	{
-		
+		if (processes.size() > 0) {
+			processes.peek().mouseMoved(e);
+		}
 	}
 	
 	// mouse listener methods
 	public void mouseClicked(MouseEvent e)
 	{
-
+		if (processes.size() > 0) {
+			processes.peek().mouseClicked(e);
+		}
 	}
 	
 	public void mouseEntered(MouseEvent e)
 	{
-		
+		if (processes.size() > 0) {
+			processes.peek().mouseEntered(e);
+		}
 	}
 	
 	public void mouseExited(MouseEvent e)
 	{
-		
+		if (processes.size() > 0) {
+			processes.peek().mouseExited(e);
+		}
 	}
 	
 	public void mousePressed(MouseEvent e)
 	{
-
+		if (processes.size() > 0) {
+			processes.peek().mousePressed(e);
+		}
 	}
 	
 	public void mouseReleased(MouseEvent e)
 	{
-	
+		if (processes.size() > 0) {
+			processes.peek().mouseReleased(e);
+		}
 	}
 }

@@ -11,6 +11,14 @@ public class Draw
         g.fillRect(x, y, width, height);
     }
 
+    public static void draw_rect(Graphics g, int x, int y, int width, int height, Color color, int stroke) {
+        g.setColor(color);
+        g.fillRect(x, y, stroke, height);
+        g.fillRect(x, y, width, stroke);
+        g.fillRect(x + width - stroke, y, stroke, height);
+        g.fillRect(x, y + height - stroke, width, stroke);
+    }
+
     // normalize - make the top-left corner the start of the inner box, not the outer box
     public static void fill_bordered_rect(Graphics g, int x, int y, int width, int height, int border_width, int border_height, Color outside, Color inner, boolean normalize)
     {

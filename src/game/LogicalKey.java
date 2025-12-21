@@ -10,6 +10,8 @@ public enum LogicalKey
 	PAUSE,
 	RESTART,
 	QUIT,
+	LEFT2,
+	RIGHT2,
 
 	NOOP // keep last
 }
