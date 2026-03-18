@@ -16,7 +16,7 @@ public class FileManager
 	public static final byte[] SAV_HEADER = ("\221" + "SAV\r\n" + "\032" + "\n").getBytes();
 	
 	// file versions
-	public static void write_cv_level(File file, int level_width, int level_height, byte[] entities, String level_name)
+	public static void legacy_write_cv_level(File file, int level_width, int level_height, byte[] entities, String level_name)
 	{
 		try
 		{
@@ -104,7 +104,7 @@ public class FileManager
 		}
 	}
 
-	public static Level read_cv_level(File file)
+	public static Level legacy_read_cv_level(File file)
 	{
 		try
 		{
@@ -164,19 +164,19 @@ public class FileManager
 	}
 	
 	// string file and path versions
-	public static void write_cv_level(String path, String filename, int level_width, int level_height, byte[] entities, String level_name)
+	public static void legacy_write_cv_level(String path, String filename, int level_width, int level_height, byte[] entities, String level_name)
 	{
-		write_cv_level(new File(path + filename), level_width, level_height, entities, level_name);
+		legacy_write_cv_level(new File(path + filename), level_width, level_height, entities, level_name);
 	}
 	
 	public static Level read_cv_level(String path, String filename)
 	{
-		return read_cv_level(new File(path + filename));
+		return legacy_read_cv_level(new File(path + filename));
 	}
 	
 	// writing, reading campaign files
 	
-	public static void write_campaign_save_file(File file, byte[] campaign_marker, int level, String name)
+	public static void legacy_write_campaign_save_file(File file, byte[] campaign_marker, int level, String name)
 	{
 		try
 		{
@@ -205,7 +205,7 @@ public class FileManager
 		}
 	}
 	
-	public static CampaignSave read_campaign_save_file(File file)
+	public static CampaignSave legacy_read_campaign_save_file(File file)
 	{
 		try
 		{
@@ -268,19 +268,19 @@ public class FileManager
 		
 	}
 	
-	public static CampaignSave read_campaign_save_file(String path, String filename)
+	public static CampaignSave legacy_read_campaign_save_file(String path, String filename)
 	{
-		return read_campaign_save_file(new File(path + filename));
+		return legacy_read_campaign_save_file(new File(path + filename));
 	}
 	
-	public static void write_campaign_save_file(String path, String filename, byte[] campaign_marker, int level, String name)
+	public static void legacy_write_campaign_save_file(String path, String filename, byte[] campaign_marker, int level, String name)
 	{
-		write_campaign_save_file(new File(path + filename), campaign_marker, level, name);
+		legacy_write_campaign_save_file(new File(path + filename), campaign_marker, level, name);
 	}
 	
 	// returns an array of strings of existing campaign save files from the path
 	// if there are none the array shall be null
-	public static String[] poll_campaign_save_files(String path)
+	public static String[] legacy_poll_campaign_save_files(String path)
 	{
 		try
 		{
@@ -294,7 +294,7 @@ public class FileManager
 				String str = contents[i];
 				
 				// check its a .SAV file
-				valid[i] = check_file_type(str, "SAV");
+				valid[i] = legacy_check_file_type(str, "SAV");
 			}
 			
 			int sum = 0;
@@ -329,7 +329,7 @@ public class FileManager
 	
 	// returns an array of strings of campaign files, i.e. the markers from path
 	// none means array will be none
-	public static String[] poll_campaign_files(String path)
+	public static String[] legacy_poll_campaign_files(String path)
 	{
 		try
 		{
@@ -346,7 +346,7 @@ public class FileManager
 	// validates thats the current campaign marker exists in the path
 	// returns 0 if it exists,
 	// -1 if not.
-	public static int validate_campaign_file(String path, String marker)
+	public static int legacy_validate_campaign_file(String path, String marker)
 	{
 		try
 		{
@@ -371,7 +371,7 @@ public class FileManager
 	// gets the biggest level present in the campaign marker folder
 	// highest number
 	// -1 if anything goes wrong
-	public static int get_campaign_max_level(String path, String marker)
+	public static int legacy_get_campaign_max_level(String path, String marker)
 	{
 		int max_lev = -1;
 		try
@@ -383,7 +383,7 @@ public class FileManager
 			for (int i = 0; i < contents.length; i++)
 			{
 				// check its a valid caveman level
-				if (check_file_type(contents[i], "CVL"))
+				if (legacy_check_file_type(contents[i], "CVL"))
 				{
 					// split from dot
 					// escape the dot!!!
@@ -410,7 +410,7 @@ public class FileManager
 	// check if this file type is the same as the arg
 	// returns true if so,
 	// false otherwise
-	public static boolean check_file_type(String name, String type)
+	public static boolean legacy_check_file_type(String name, String type)
 	{
 		int name_len = name.length();
 		int type_len = type.length();

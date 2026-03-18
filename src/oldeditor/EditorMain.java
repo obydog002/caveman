@@ -247,7 +247,7 @@ public class EditorMain extends JPanel implements ActionListener
 			{
 				File file = fc.getSelectedFile();
 				
-				Level level = FileManager.read_cv_level(file);
+				Level level = FileManager.legacy_read_cv_level(file);
 				
 				// something went wrong!
 				if (level == null)
@@ -317,7 +317,7 @@ public class EditorMain extends JPanel implements ActionListener
 					byte_ents[i] = b;
 				}
 				
-				FileManager.write_cv_level(file, level.width, level.height, byte_ents, level.name);
+				FileManager.legacy_write_cv_level(file, level.width, level.height, byte_ents, level.name);
 				
 				panel.set_prev();
 			}
