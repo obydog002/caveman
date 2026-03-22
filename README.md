@@ -6,6 +6,6 @@ Play as a caveman and get to the end of the level. Push blocks to create paths, 
 ![gameplay image](/res/images/level3-ex.png)
 
 ## How to play
-clone this repository, then run the "make" file (which is just a windows batch file with four javac commands for each of the packages), or compile each of the four packages with javac src/\<package\>/\*.java from the caveman folder.
 
-Run the game with java src.game.Main .
+Use `compile.sh` to compile the java classes, and `run.sh` to start the game.
+
