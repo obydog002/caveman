@@ -203,6 +203,10 @@ public class CavemanMain extends Canvas implements Runnable, MouseMotionListener
 		processes.push(c);
 	}
 
+	public boolean hasPreviousProcess() {
+		return processes.size() > 1;
+	}
+
 	public void tick()
 	{
 		if (processes.size() > 0) {

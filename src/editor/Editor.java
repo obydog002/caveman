@@ -1,10 +1,15 @@
 package src.editor;
 
+import java.awt.FileDialog;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.util.ArrayList;
 
+import src.file.FileManager;
 import src.file.Level;
 import src.game.AbstractInput;
 import src.game.Art;
@@ -12,7 +17,10 @@ import src.game.CavemanMain;
 import src.game.Control;
 import src.game.Draw;
 import src.game.GameConstants;
+import src.game.KeyEventPair;
 import src.game.LogicalKey;
+import src.game.Style;
+import src.menu.EscapeMenu;
 
 public class Editor extends Control {
 	private AbstractInput input;
@@ -27,11 +35,37 @@ public class Editor extends Control {
 	private double entity_width = 0;
 	private double entity_height = 0;
 
+	private String savedFilePath = null;
+
 	public Editor(AbstractInput input, CavemanMain main)
 	{
 		this.input = input;
 		this.main = main;
 		this.level = new Level(32, 20, "");
+	}
+
+	public void setLevel(Level l) {
+		this.level = l;
+		this.x_selection = 0;
+		this.y_selection = 0;
+		this.savedFilePath = null;
+	}
+
+	private void doSave() {
+		if (savedFilePath != null) {
+			FileManager.writeCVLevel(new File(savedFilePath), level);
+		} else {
+			FileDialog fd = new FileDialog(main.getFrame(), "Save Level", FileDialog.SAVE);
+			fd.setFile("level.caveman");
+			fd.setVisible(true);
+			String dir = fd.getDirectory();
+			String file = fd.getFile();
+			if (file != null) {
+				if (!file.endsWith(".caveman")) file += ".caveman";
+				savedFilePath = dir + file;
+				FileManager.writeCVLevel(new File(savedFilePath), level);
+			}
+		}
 	}
 
 	private void set_x_selection(int v) {
@@ -91,6 +125,43 @@ public class Editor extends Control {
 			int index = x_selection + y_selection * level.width;
 			level.entities[index] = selection;
 		}
+
+		KeyEventPair pair;
+		while ((pair = input.keyqueue_get_next()) != null) {
+			if (pair.is_clicked()) {
+				if (pair.rawCode == KeyEvent.VK_ESCAPE) {
+					main.add_process(buildEscapeMenu());
+					return;
+				} else if (pair.rawCode == KeyEvent.VK_S && pair.is_ctrl_or_meta()) {
+					doSave();
+				}
+			}
+		}
+	}
+
+	private EscapeMenu buildEscapeMenu() {
+		ArrayList<String> opts = new ArrayList<>();
+		ArrayList<Runnable> acts = new ArrayList<>();
+
+		opts.add("resume");      acts.add(null);
+		opts.add("new level");   acts.add(() -> setLevel(new Level(32, 20, "")));
+		opts.add("save level");  acts.add(() -> doSave());
+		opts.add("load level");  acts.add(() -> {
+			FileDialog fd = new FileDialog(main.getFrame(), "Load Level", FileDialog.LOAD);
+			fd.setVisible(true);
+			String dir = fd.getDirectory();
+			String file = fd.getFile();
+			if (file != null) {
+				setLevel(FileManager.readCVLevel(new File(dir + file)));
+			}
+		});
+
+		if (main.hasPreviousProcess()) {
+			opts.add("main menu");
+			acts.add(() -> shouldExit = true);
+		}
+
+		return new EscapeMenu(input, "editor", opts.toArray(new String[0]), acts.toArray(new Runnable[0]), this);
 	}
 
 	private BufferedImage indexToImage(int i) {
@@ -159,6 +230,7 @@ public class Editor extends Control {
 		}
 		render_selection(g, selection, height + x, y, height, height, true);
 		render_selection(g, selection + 1, 2*height + x, y, height, height, false);
+		Art.font.draw_string(g, "esc: menu", 3 * height + 10, y + (height - 12) / 2, 12, 12, Style.neutral_color_pair);
 	}
 
 	public void render(Graphics g, int width, int height) {
@@ -170,8 +242,10 @@ public class Editor extends Control {
 		render_toolbar(g, 0, levelHeight, screenWidth, GameConstants.ToolBarHeight);
 	}
 
+	private boolean shouldExit = false;
+
 	public boolean requestExit() {
-		return false;
+		return shouldExit;
 	}
 
 	public boolean requestFullExit() {

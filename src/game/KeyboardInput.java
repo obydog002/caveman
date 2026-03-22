@@ -43,26 +43,28 @@ public class KeyboardInput implements KeyListener, AbstractInput
 		this.logicalConverter = logicalConverter;
 	}
 
-	public void keyPressed(KeyEvent ke) 
+	public void keyPressed(KeyEvent ke)
 	{
 		int key_code = ke.getKeyCode();
 		LogicalKey logicalKey = logicalConverter.get_logical_key(key_code);
 		int hack = logToRaw.get(logicalKey);
 		int val = keys[hack].get();
+		int modifiers = ke.getModifiersEx();
 		if (val == 0)
 		{
 			keys[hack].set(2); // a 'click' event
-			keys_queue.add(new KeyEventPair(logicalKey, key_code, KeyEventPair.KeyEventType.CLICKED));
+			keys_queue.add(new KeyEventPair(logicalKey, key_code, KeyEventPair.KeyEventType.CLICKED, modifiers));
 		}
-		else 
+		else
 		{
-			keys_queue.add(new KeyEventPair(logicalKey, key_code, KeyEventPair.KeyEventType.PRESSED));
+			keys_queue.add(new KeyEventPair(logicalKey, key_code, KeyEventPair.KeyEventType.PRESSED, modifiers));
 		}
 	}
 
-	public void keyReleased(KeyEvent ke) 
+	public void keyReleased(KeyEvent ke)
 	{
-		LogicalKey logicalKey = logicalConverter.get_logical_key(ke.getKeyCode());
+		int key_code = ke.getKeyCode();
+		LogicalKey logicalKey = logicalConverter.get_logical_key(key_code);
 		int hack = logToRaw.get(logicalKey);
 		keys[hack].set(0);
 		keys_queue.add(new KeyEventPair(logicalKey, ke.getKeyCode(), KeyEventPair.KeyEventType.RELEASED));
@@ -73,23 +75,23 @@ public class KeyboardInput implements KeyListener, AbstractInput
 		// empty
 	}
 
-    	public boolean key_held(LogicalKey key)
-    	{
+    public boolean key_held(LogicalKey key)
+    {
 		int hack = logToRaw.get(key);
-        	return keys[hack].get() != 0;
-    	}
+    	return keys[hack].get() != 0;
+    }
 
-    	public boolean key_clicked(LogicalKey key)
-    	{
+    public boolean key_clicked(LogicalKey key)
+    {
 		int hack = logToRaw.get(key);
-        	int val = keys[hack].get();
-        	if (val == 2)
-        	{
-            		keys[hack].decrementAndGet();
-            		return true;
-        	}
-        	return false;
-    	}
+        int val = keys[hack].get();
+        if (val == 2)
+        {
+            keys[hack].decrementAndGet();
+            return true;
+        }
+        return false;
+    }
 
 	public KeyEventPair keyqueue_get_next()
 	{
